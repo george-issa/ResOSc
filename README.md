@@ -1,0 +1,4 @@
+# ResOSc
+
+### Dependencies
+* Python
