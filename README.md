@@ -7,7 +7,7 @@ A Python package for simulating and analyzing coupled oscillator systems. ResOSc
 - **Normal Mode Analysis** — Eigenvalue decomposition to find normal frequencies and mode shapes
 - **Forced Oscillation Response** — Complex amplitude response curves with damping
 - **Observable Optimization** — Find optimal sensor weights to maximize detection sensitivity across all modes
-- **Visualization** — Publication-quality plots of mode shapes, amplitude response, and coupling heatmaps
+- **Visualization** — Plots of mode shapes, amplitude response, and coupling heatmaps
 
 ## Installation
 
