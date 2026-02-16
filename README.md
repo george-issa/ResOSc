@@ -54,6 +54,7 @@ sys.compute_amplitudes(omega_range=(0, 3), n_points=1000)
 
 - NumPy
 - SciPy
+- LAPACK
 - Matplotlib
 
 ## Demo
