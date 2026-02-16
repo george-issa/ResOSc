@@ -58,4 +58,4 @@ sys.compute_amplitudes(omega_range=(0, 3), n_points=1000)
 
 ## Demo
 
-See `ResOSc_demo_used.ipynb` for worked examples and visualizations.
+See `ResOSc_demo.ipynb` for worked examples and visualizations.
