@@ -12,11 +12,12 @@ import matplotlib.pyplot as plt
 def setup_plot_style():
     """Configure matplotlib rcParams to match the project's style."""
     plt.rcParams.update({
-        'font.size': 12,
-        'axes.labelsize': 8,
-        'xtick.labelsize': 10,
-        'ytick.labelsize': 10,
-        'legend.fontsize': 8,
+        'font.size': 20,
+        'axes.labelsize': 22,
+        'xtick.labelsize': 18,
+        'ytick.labelsize': 18,
+        'legend.fontsize': 16,
+        'axes.titlesize': 24,
         'font.family': 'sans-serif',
         'font.sans-serif': ['Helvetica'],
         'text.usetex': True,
@@ -50,15 +51,13 @@ def plot_normal_amplitudes(system, w_range=(0.5, 3.5), resolution=250, savefig=N
         plt.plot(w, b[f'Mode {i}'], '-', color=colors[i], linewidth=1.5,
                  label=fr'$\omega^*={system.frequencies[i]:.2f}$')
 
-    plt.legend(frameon=False, fontsize=8, loc='upper left')
-    plt.ylabel('Amplitude of Normal Coordinate', fontsize=12)
-    plt.xlabel(r'$\omega$', fontsize=12)
+    plt.legend(frameon=False, fontsize=16, loc='upper left')
+    plt.ylabel(r'Amplitude of Normal Coordinate', fontsize=22)
+    plt.xlabel(r'$\omega$', fontsize=22)
     plt.xlim(np.sqrt(w_range[0]), np.sqrt(w_range[1]))
-    plt.xticks(usetex=False)
-    plt.yticks(usetex=False)
     plt.tick_params(axis='both', direction='in', which='major',
                     top=True, bottom=True, left=True, right=True,
-                    length=5, width=0.75, labelsize=8)
+                    length=6, width=1.0, labelsize=18)
 
     if savefig:
         plt.savefig(savefig, format='pdf', bbox_inches='tight', pad_inches=0.10)
@@ -92,15 +91,13 @@ def plot_spatial_amplitudes(system, w_range=(0.5, 3.5), resolution=250, savefig=
         plt.plot(w, x[f'Oscillator {i}'], '-', color=colors[i], linewidth=1.5,
                  label=f'$m={system.M[i]:.2f}$')
 
-    plt.legend(frameon=False, fontsize=8)
-    plt.ylabel('Amplitude of Spatial Coordinate', fontsize=12)
-    plt.xlabel(r'$\omega$', fontsize=12)
+    plt.legend(frameon=False, fontsize=16)
+    plt.ylabel(r'Amplitude of Spatial Coordinate', fontsize=22)
+    plt.xlabel(r'$\omega$', fontsize=22)
     plt.xlim(np.sqrt(w_range[0]), np.sqrt(w_range[1]))
-    plt.xticks(usetex=False)
-    plt.yticks(usetex=False)
     plt.tick_params(axis='both', direction='in', which='major',
                     top=True, bottom=True, left=True, right=True,
-                    length=5, width=0.75, labelsize=8)
+                    length=6, width=1.0, labelsize=18)
 
     if savefig:
         plt.savefig(savefig, format='pdf', bbox_inches='tight', pad_inches=0.10)

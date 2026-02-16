@@ -12,6 +12,16 @@ import matplotlib.pyplot as plt
 from scipy.optimize import minimize
 
 
+def _ensure_latex():
+    """Enable LaTeX rendering for all text."""
+    plt.rcParams.update({
+        'text.usetex': True,
+        'font.family': 'sans-serif',
+        'font.sans-serif': ['Helvetica'],
+        'text.latex.preamble': r'\usepackage{amsmath} \usepackage{amssymb}',
+    })
+
+
 def coupling_matrix(system):
     """Compute the coupling matrix between oscillators and modes.
 
@@ -41,26 +51,28 @@ def coupling_heatmap(system, savefig=None):
     savefig : str, optional
         If provided, save figure to this path.
     """
+    _ensure_latex()
     n = system.n
     C = coupling_matrix(system)
     freqs = system.frequencies
 
-    fig, ax = plt.subplots(figsize=(8, 6), dpi=125)
+    fig, ax = plt.subplots(figsize=(10, 8), dpi=125)
     im = ax.imshow(np.abs(C), cmap='viridis', aspect='auto')
 
-    ax.set_xlabel('Mode', fontsize=11)
-    ax.set_ylabel('Oscillator', fontsize=11)
+    ax.set_xlabel(r'Mode', fontsize=22)
+    ax.set_ylabel(r'Oscillator', fontsize=22)
     ax.set_xticks(np.arange(n))
     ax.set_xticklabels([fr'$\omega^*={freqs[i]:.2f}$' for i in range(n)],
-                       fontsize=7, rotation=45, ha='right')
+                       fontsize=14, rotation=45, ha='right')
     ax.set_yticks(np.arange(n))
-    ax.set_yticklabels([f'Osc {j}' for j in range(n)], fontsize=8)
-    ax.tick_params(axis='both', direction='in', length=3)
+    ax.set_yticklabels([fr'Osc $\,{j}$' for j in range(n)], fontsize=16)
+    ax.tick_params(axis='both', direction='in', length=4, width=1.0, labelsize=16)
 
     cbar = fig.colorbar(im, ax=ax, shrink=0.8)
-    cbar.set_label(r'$|C_{j,i}|$ (coupling strength)', fontsize=10)
+    cbar.set_label(r'$|C_{j,i}|$ (coupling strength)', fontsize=20)
+    cbar.ax.tick_params(labelsize=16)
 
-    ax.set_title('Oscillator-Mode Coupling Matrix', fontsize=12)
+    ax.set_title(r'Oscillator--Mode Coupling Matrix', fontsize=24)
     plt.tight_layout()
 
     if savefig:
@@ -263,25 +275,27 @@ def compare_observables(system, savefig=None):
     opt = optimize_observable(system)
 
     # Plot comparison
-    fig, ax = plt.subplots(figsize=(10, 5), dpi=125)
+    _ensure_latex()
+    fig, ax = plt.subplots(figsize=(12, 7), dpi=125)
     x_pos = np.arange(n)
     width = 0.35
 
     bars1 = ax.bar(x_pos - width / 2, best_single_S, width,
-                   label=f'Best single oscillator (Osc {best_j})',
+                   label=fr'Best single oscillator (Osc {best_j})',
                    color='steelblue', alpha=0.8)
     bars2 = ax.bar(x_pos + width / 2, opt['sensitivities'], width,
-                   label='Optimized linear combination',
+                   label=r'Optimized linear combination',
                    color='firebrick', alpha=0.8)
 
-    ax.set_xlabel('Mode', fontsize=11)
-    ax.set_ylabel('Sensitivity at Resonance', fontsize=11)
-    ax.set_title('Observable Sensitivity Comparison', fontsize=12)
+    ax.set_xlabel(r'Mode', fontsize=22)
+    ax.set_ylabel(r'Sensitivity at Resonance', fontsize=22)
+    ax.set_title(r'Observable Sensitivity Comparison', fontsize=24)
     ax.set_xticks(x_pos)
     ax.set_xticklabels([fr'$\omega^*={freqs[i]:.2f}$' for i in range(n)],
-                       fontsize=7, rotation=45, ha='right')
-    ax.tick_params(axis='both', direction='in', length=4, top=True, right=True)
-    ax.legend(frameon=False, fontsize=9)
+                       fontsize=14, rotation=45, ha='right')
+    ax.tick_params(axis='both', direction='in', length=5, width=1.0,
+                   top=True, right=True, labelsize=18)
+    ax.legend(frameon=False, fontsize=18)
     plt.tight_layout()
 
     if savefig:
