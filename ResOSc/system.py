@@ -147,10 +147,9 @@ class CoupledSystem:
 
         return self.wr, self.eigenvectors
 
-    def compute_forces(self, L=1.0, h0=1.0):
+    def compute_forces(self, L=1.0, h0=1.0, force_model='strain', force_vec=None):
         """Compute driving forces and generalized forces on normal modes.
 
-        The driving force on oscillator i is f_i = L * h0 * k_ii.
         The generalized force on mode i is q_i = sum_j A_ij * f_j.
 
         Parameters
@@ -158,10 +157,44 @@ class CoupledSystem:
         L : float
             Length parameter of the experiment.
         h0 : float
-            Strain amplitude parameter.
+            Signal amplitude parameter (overall scale factor).
+        force_model : {'strain', 'uniform', 'custom'}
+            Spatial dependence of the driving force on each oscillator:
+
+            'strain'  — GW / elastic-strain coupling: f_i = h0 * L * k_ii.
+                        Force proportional to wall spring, appropriate for
+                        gravitational waves where tidal forcing scales with
+                        local stiffness.
+
+            'uniform' — Momentum-impulse coupling: f_i = h0 * L for all i.
+                        Force identical on all oscillators, appropriate for
+                        direct dark matter interactions where the DM imparts
+                        a momentum kick independent of local spring stiffness.
+
+            'custom'  — User-defined spatial profile: f_i = h0 * force_vec[i].
+                        Provides full control; use for coherent DM waves,
+                        position-dependent forces, or any arbitrary coupling.
+                        h0 sets the overall amplitude; force_vec carries the
+                        spatial profile (e.g. L * cos(k_DM * positions)).
+
+        force_vec : array_like, shape (n,), optional
+            Required when force_model='custom'. Spatial profile of the force
+            (without the h0 prefactor).
         """
         n = self.n
-        self.f = np.array([L * h0 * self.K[i, i] for i in range(n)])
+        if force_model == 'strain':
+            self.f = np.array([L * h0 * self.K[i, i] for i in range(n)])
+        elif force_model == 'uniform':
+            self.f = np.full(n, h0 * L)
+        elif force_model == 'custom':
+            if force_vec is None:
+                raise ValueError("force_vec must be provided for force_model='custom'.")
+            self.f = h0 * np.asarray(force_vec, dtype=np.float64)
+        else:
+            raise ValueError(
+                f"Unknown force_model '{force_model}'. "
+                "Choose 'strain', 'uniform', or 'custom'."
+            )
         self.q = dgemv(alpha=1.0, a=self.eigenvectors, x=self.f)
         return self.q
 
@@ -226,3 +259,93 @@ class CoupledSystem:
         if self.gamma == 0:
             raise ValueError("Damping gamma must be > 0 to compute finite peak sensitivities.")
         return np.abs(self.q) / (2 * self.gamma * self.wr)
+
+    def reference_system(self):
+        """Build and solve the non-interacting (uncoupled) reference system.
+
+        The reference system has the same masses and wall springs as self
+        but all coupling springs set to zero.  Its normal modes are the
+        individual oscillators with bare frequencies
+
+            omega_i^0 = sqrt(k_ii / m_i)
+
+        and its eigenvector matrix is the identity, so each oscillator is
+        its own mode.  Call compute_forces() on the returned object with the
+        same parameters used on self to obtain reference peak sensitivities
+        for normalization.
+
+        Returns
+        -------
+        ref : CoupledSystem
+            A solved non-interacting system.  Forces are NOT pre-computed;
+            call ref.compute_forces(...) with the same arguments before
+            accessing peak_sensitivities() or sensitivity_profile().
+        """
+        ref = CoupledSystem(self.n)
+        ref.M = self.M.copy()
+        ref.K = np.diag(np.diag(self.K))   # wall springs only, zero coupling
+        ref.gamma = self.gamma
+        ref.build_H()
+        ref.solve()
+        return ref
+
+    def frequency_spread(self, reference=None):
+        """Compute frequency-spread metrics for the normal modes.
+
+        Parameters
+        ----------
+        reference : CoupledSystem, optional
+            If provided (typically from self.reference_system()), also
+            returns comparison metrics showing how much extra spread the
+            coupling introduces relative to the bare oscillator frequencies.
+
+        Returns
+        -------
+        result : dict
+            'absolute'          — omega_max - omega_min (bandwidth of the
+                                  normal-mode spectrum; the physically
+                                  relevant metric for detector bandwidth).
+            'relative'          — absolute spread / geometric-mean frequency
+                                  (dimensionless bandwidth, useful for
+                                  comparing systems at different center freqs).
+            'spacing_uniformity'— coefficient of variation (std/mean) of
+                                  consecutive mode spacings.  0 = perfectly
+                                  uniform spacing; larger = more clustered.
+            'spacings'          — array of differences between consecutive
+                                  sorted normal frequencies.
+            'omega_min'         — lowest normal frequency.
+            'omega_max'         — highest normal frequency.
+
+            If reference is provided, also includes:
+            'absolute_gain'     — self.absolute - ref.absolute  (extra spread
+                                  introduced by the coupling springs).
+            'relative_gain'     — self.relative / ref.relative  (ratio of
+                                  relative spreads; > 1 means coupling widens
+                                  the band beyond the bare-frequency spread).
+        """
+        freqs = np.sort(self.frequencies)
+        omega_min, omega_max = freqs[0], freqs[-1]
+        abs_spread = omega_max - omega_min
+        geom_mean = np.exp(np.mean(np.log(freqs)))
+        rel_spread = abs_spread / geom_mean
+
+        spacings = np.diff(freqs)
+        mean_spacing = np.mean(spacings)
+        spacing_cv = np.std(spacings) / mean_spacing if mean_spacing > 0 else np.nan
+
+        result = {
+            'absolute': abs_spread,
+            'relative': rel_spread,
+            'spacing_uniformity': spacing_cv,
+            'spacings': spacings,
+            'omega_min': omega_min,
+            'omega_max': omega_max,
+        }
+
+        if reference is not None:
+            ref_spread = reference.frequency_spread()
+            result['absolute_gain'] = abs_spread - ref_spread['absolute']
+            ref_rel = ref_spread['relative']
+            result['relative_gain'] = (rel_spread / ref_rel) if ref_rel > 0 else np.nan
+
+        return result

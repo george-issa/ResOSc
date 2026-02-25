@@ -183,7 +183,50 @@ def sensitivity_profile(system, weights):
     return np.abs(c) * peaks
 
 
-def optimize_observable(system):
+def normalized_sensitivity_profile(system, weights, reference):
+    """Sensitivity profile normalized against the non-interacting reference.
+
+    Divides each per-mode sensitivity by the *reference scale*, defined as
+    the optimal worst-case sensitivity achievable in the non-interacting
+    system using a linear observable:
+
+        ref_scale = 1 / sqrt( sum_i  1 / b_ref_i^2 )
+
+    This is the harmonic-L2 mean of the reference peak sensitivities and
+    equals the minimax optimal sensitivity for the reference system (the
+    best min_i S_i achievable over all unit-norm weight vectors when the
+    eigenvectors are the identity).  For uniform reference sensitivities
+    b_ref, this reduces to b_ref / sqrt(n).
+
+    A normalized worst-case sensitivity > 1 means the coupled system with
+    the given weights outperforms the best possible single observable on the
+    uncoupled reference.
+
+    Parameters
+    ----------
+    system : CoupledSystem
+        A solved coupled oscillator system (must have gamma > 0 and forces
+        computed).
+    weights : array_like, shape (n,)
+        Weight vector defining the observable O = sum_j w_j x_j.
+    reference : CoupledSystem
+        The non-interacting reference (from system.reference_system()) with
+        forces already computed via the same force_model and parameters.
+
+    Returns
+    -------
+    S_norm : ndarray, shape (n,)
+        Per-mode sensitivity normalized by ref_scale.
+    ref_scale : float
+        The reference normalization scale (same units as sensitivity).
+    """
+    S = sensitivity_profile(system, weights)
+    b_ref = reference.peak_sensitivities()
+    ref_scale = 1.0 / np.sqrt(np.sum(1.0 / b_ref ** 2))
+    return S / ref_scale, ref_scale
+
+
+def optimize_observable(system, reference=None):
     """Find the weight vector that maximizes worst-case sensitivity.
 
     Solves: max_{||w||=1} min_i S_i(w)
@@ -192,13 +235,23 @@ def optimize_observable(system):
     ----------
     system : CoupledSystem
         A solved coupled oscillator system (must have gamma > 0).
+    reference : CoupledSystem, optional
+        If provided (from system.reference_system() with forces computed),
+        also returns the worst-case sensitivity normalized by the reference
+        scale.  A normalized value > 1 means the coupled system with optimal
+        weights beats the best achievable sensitivity in the reference.
 
     Returns
     -------
     result : dict
-        'weights': optimal weight vector (normalized).
-        'sensitivities': sensitivity profile at optimal weights.
-        'min_sensitivity': the worst-case sensitivity achieved.
+        'weights'                  : optimal weight vector (normalized).
+        'sensitivities'            : sensitivity profile at optimal weights.
+        'min_sensitivity'          : worst-case sensitivity achieved.
+
+        If reference is provided, also includes:
+        'ref_scale'                : normalization scale from the reference
+                                     (see normalized_sensitivity_profile).
+        'normalized_min_sensitivity': min_sensitivity / ref_scale.
     """
     n = system.n
     peaks = system.peak_sensitivities()
@@ -226,34 +279,55 @@ def optimize_observable(system):
     w_opt = best_result.x / np.linalg.norm(best_result.x)
     S_opt = sensitivity_profile(system, w_opt)
 
-    return {
+    result = {
         'weights': w_opt,
         'sensitivities': S_opt,
         'min_sensitivity': np.min(S_opt),
     }
 
+    if reference is not None:
+        _, ref_scale = normalized_sensitivity_profile(system, w_opt, reference)
+        result['ref_scale'] = ref_scale
+        result['normalized_min_sensitivity'] = np.min(S_opt) / ref_scale
 
-def compare_observables(system, savefig=None):
+    return result
+
+
+def compare_observables(system, reference=None, savefig=None):
     """Compare best single-oscillator observable vs optimized weights.
 
     Plots the sensitivity profile S_i for each mode for:
     1. The best single oscillator (highest worst-case sensitivity)
     2. The optimized linear combination
 
+    If a reference system is provided, a horizontal dashed line marks the
+    reference scale (the optimal minimax sensitivity of the non-interacting
+    system).  Bars above this line represent a genuine gain from coupling.
+
     Parameters
     ----------
     system : CoupledSystem
         A solved coupled oscillator system (must have gamma > 0).
+    reference : CoupledSystem, optional
+        Non-interacting reference (from system.reference_system()) with
+        forces already computed.  When provided, adds a reference benchmark
+        line to the plot and normalized worst-case sensitivities to the
+        returned dict.
     savefig : str, optional
         If provided, save figure to this path.
 
     Returns
     -------
     result : dict
-        'best_single_oscillator': index of best single oscillator.
+        'best_single_oscillator'   : index of best single oscillator.
         'best_single_sensitivities': its sensitivity profile.
-        'optimal_weights': optimized weight vector.
-        'optimal_sensitivities': optimized sensitivity profile.
+        'optimal_weights'          : optimized weight vector.
+        'optimal_sensitivities'    : optimized sensitivity profile.
+
+        If reference is provided, also includes:
+        'ref_scale'                        : reference normalization scale.
+        'normalized_best_single_min'       : best-single worst-case / ref_scale.
+        'normalized_optimal_min_sensitivity': optimal worst-case / ref_scale.
     """
     n = system.n
     freqs = system.frequencies
@@ -271,8 +345,11 @@ def compare_observables(system, savefig=None):
             best_j = j
             best_single_S = S
 
-    # Optimized observable
-    opt = optimize_observable(system)
+    # Optimized observable (pass reference so normalized value is computed)
+    opt = optimize_observable(system, reference=reference)
+
+    # Reference scale for plot line
+    ref_scale = opt.get('ref_scale', None)
 
     # Plot comparison
     _ensure_latex()
@@ -280,12 +357,16 @@ def compare_observables(system, savefig=None):
     x_pos = np.arange(n)
     width = 0.35
 
-    bars1 = ax.bar(x_pos - width / 2, best_single_S, width,
-                   label=fr'Best single oscillator (Osc {best_j})',
-                   color='steelblue', alpha=0.8)
-    bars2 = ax.bar(x_pos + width / 2, opt['sensitivities'], width,
-                   label=r'Optimized linear combination',
-                   color='firebrick', alpha=0.8)
+    ax.bar(x_pos - width / 2, best_single_S, width,
+           label=fr'Best single oscillator (Osc {best_j})',
+           color='steelblue', alpha=0.8)
+    ax.bar(x_pos + width / 2, opt['sensitivities'], width,
+           label=r'Optimized linear combination',
+           color='firebrick', alpha=0.8)
+
+    if ref_scale is not None:
+        ax.axhline(ref_scale, color='goldenrod', linewidth=2.0, linestyle='--',
+                   label=r'Reference scale (uncoupled minimax)')
 
     ax.set_xlabel(r'Mode', fontsize=22)
     ax.set_ylabel(r'Sensitivity at Resonance', fontsize=22)
@@ -303,9 +384,16 @@ def compare_observables(system, savefig=None):
 
     plt.show()
 
-    return {
+    result = {
         'best_single_oscillator': best_j,
         'best_single_sensitivities': best_single_S,
         'optimal_weights': opt['weights'],
         'optimal_sensitivities': opt['sensitivities'],
     }
+
+    if ref_scale is not None:
+        result['ref_scale'] = ref_scale
+        result['normalized_best_single_min'] = best_single_min / ref_scale
+        result['normalized_optimal_min_sensitivity'] = opt['normalized_min_sensitivity']
+
+    return result
