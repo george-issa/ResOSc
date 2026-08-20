@@ -87,16 +87,11 @@ ref_freqs = np.sort(ref.frequencies)
 # ---- figure -----------------------------------------------------------------
 fig = plt.figure(figsize=(11.5, 10.2))
 gs = fig.add_gridspec(3, 3, hspace=0.52, wspace=0.30,
-                      left=0.065, right=0.965, top=0.87, bottom=0.06,
+                      left=0.065, right=0.965, top=0.92, bottom=0.06,
                       height_ratios=[1.0, 1.15, 1.0])
 
-fig.suptitle('The route-3 champion: a fully-coupled lab-feasible detector at +21%',
+fig.suptitle('Fully coupled (lab buildable) detector',
              fontsize=13, color=INK, x=0.065, ha='left', y=0.97)
-fig.text(0.065, 0.925,
-         f'Coupling floor 0.02 (all nine bonds active). Worst-mode swept response '
-         f'{S_res.min():.2f} = {S_res.min()/BOUND:.3f} × the universal uncoupled '
-         f'bound ({BOUND:.2f}); all mode gaps ≥ 3 linewidths.',
-         fontsize=9, color=INK2)
 
 def param_panel(ax, xv, yv, title, ylabel, lo, hi, log=False):
     ax.plot(xv, yv, color=BLUE, lw=2.0, marker='o', ms=4.5, zorder=3)
@@ -130,7 +125,7 @@ axD = fig.add_subplot(gs[1, 0:2])
 vmax = np.max(np.abs(modes))
 im = axD.imshow(modes, cmap=DIV, norm=TwoSlopeNorm(0, -vmax, vmax),
                 aspect='auto', interpolation='nearest')
-axD.set_title('Normal-mode states', color=INK, loc='left')
+axD.set_title('Normal mode states', color=INK, loc='left')
 axD.set_xlabel('site $i$')
 axD.set_ylabel('mode (sorted by frequency)')
 axD.set_xticks(np.arange(n), sites)
@@ -167,7 +162,7 @@ for y, (label, fr, color) in enumerate(rows_sp):
 axF = fig.add_subplot(gs[2, :])
 axF.plot(om_grid, O, color=BLUE, lw=1.6, zorder=3)
 axF.axhline(BOUND, color=ORANGE, lw=1.6, ls=(0, (5, 3)), zorder=2)
-axF.text(om_grid[-1], BOUND, 'universal uncoupled bound  ',
+axF.text(om_grid[-1], BOUND, 'uncoupled bound  ',
          color=ORANGE, fontsize=8.5, ha='right', va='bottom')
 imin = int(np.argmin(S_res))
 axF.scatter(s.frequencies, S_res, s=26, color=BLUE, zorder=4,
@@ -180,7 +175,7 @@ axF.set_yscale('log')
 axF.set_xlim(om_grid[0], om_grid[-1])
 axF.set_xlabel(r'driving frequency $\omega$')
 axF.set_ylabel(r'observable response $|O(\omega)|$')
-axF.set_title('Swept response of the optimal observable — every resonance clears the bound',
+axF.set_title('Response of the optimal observable: every resonance beats the uncoupled bound',
               color=INK, loc='left')
 
 fig.savefig('/Users/gissa/Documents/Nancy/ResOSc/results-mc/route3_champion.pdf')
