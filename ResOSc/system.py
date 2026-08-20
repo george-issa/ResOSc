@@ -6,6 +6,7 @@ oscillation amplitudes, and peak sensitivity computation.
 """
 
 import numpy as np
+import scipy.linalg
 from scipy.linalg import lapack
 from scipy.linalg.blas import dgemv, dgemm
 
@@ -123,7 +124,20 @@ class CoupledSystem:
         return H
 
     def solve(self):
-        """Solve the eigenvalue problem H A = omega*^2 A using LAPACK dgeev.
+        """Solve the generalized eigenvalue problem K x = omega*^2 M x.
+
+        Uses the symmetric-definite formulation (scipy.linalg.eigh) so the
+        mode vectors are the physically correct M-orthonormal generalized
+        eigenvectors: V^T M V = I.  With rows = modes (self.eigenvectors =
+        V^T), the modal force projection q = A f and the spatial
+        reconstruction x = b @ A are both exact for unequal masses.
+
+        (History: this previously called LAPACK dgeev on H = M^-1 K and
+        unpacked the return as (wr, wi, vr, vi, info) — but dgeev returns
+        (wr, wi, vl, vr, info), so the LEFT eigenvectors of the
+        non-symmetric H were used as the modal matrix.  For unequal masses
+        that basis is neither the right eigenvectors nor M-orthonormal,
+        which skewed every force projection and response reconstruction.)
 
         Stores eigenvalues (squared frequencies) sorted descending, and
         the corresponding eigenvector matrix (rows = modes).
@@ -131,18 +145,16 @@ class CoupledSystem:
         if self.H is None:
             self.build_H()
 
-        wr, wi, vr, vi, info = lapack.dgeev(self.H)
+        # Stiffness matrix K~ = M H is symmetric; symmetrize away float noise
+        K_full = self.M[:, None] * self.H
+        K_full = 0.5 * (K_full + K_full.T)
 
-        if info != 0:
-            raise RuntimeError(f"LAPACK dgeev failed with info = {info}")
-
-        # Eigenvectors come in columns; transpose so rows = modes
-        vr = np.transpose(vr)
+        w, V = scipy.linalg.eigh(K_full, np.diag(self.M))
 
         # Sort by eigenvalue descending (highest frequency first)
-        idx = np.argsort(wr)[::-1]
-        self.wr = wr[idx]
-        self.eigenvectors = vr[idx]
+        idx = np.argsort(w)[::-1]
+        self.wr = w[idx]
+        self.eigenvectors = V[:, idx].T   # rows = modes, V^T M V = I
         self.frequencies = np.sqrt(self.wr)
 
         return self.wr, self.eigenvectors

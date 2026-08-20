@@ -1,0 +1,145 @@
+box scale = 15.8114
+
+===== floor K_MIN = 0.01 =====
+Box-optimal uncoupled scale: 15.8114 (score 1.0 = best possible uncoupled design)
+Metropolis walk: 20000 steps, T: 3.0 → 0.01, step_size: 0.2...
+  Total accepted: 2658/20000 (13.29%)
+  Best energy: -0.4960 at step 19146 (final chain energy: -0.4765)
+Phase 2: refining top 100 chain samples with full minimax optimization...
+  Refined 20/100...
+  Refined 40/100...
+  Refined 60/100...
+  Refined 80/100...
+  Refined 100/100...
+
+Best Metropolis configuration (combined score = 1.0000):
+  Box-norm. sensitivity : 1.0351  (raw 16.3671, own-ref 0.7884)
+  Spread (relative)    : 1.7087
+  Masses    : [2.528 1.212 2.78  1.036 1.79  1.766 1.878 2.005 1.415 2.543]
+  Wall k    : [0.385 5.484 6.    0.71  0.2   6.    0.7   3.606 0.382 2.43 ]
+  Coupling k: [0.034 0.094 0.563 0.186 0.724 0.071 0.061 0.056 0.061]
+  Pareto-front size: 5
+  Acceptance rate: 13.29%
+floor 0.01: search=1.0351  polished iso=1.1251  swept=1.0385  min_gap=3.00 lw
+
+===== floor K_MIN = 0.02 =====
+Box-optimal uncoupled scale: 15.8114 (score 1.0 = best possible uncoupled design)
+Metropolis walk: 20000 steps, T: 3.0 → 0.01, step_size: 0.2...
+  Step 16000/20000 | T=0.0313 | E=-0.1255 | accept rate so far: 14.78%
+  Total accepted: 2439/20000 (12.20%)
+  Best energy: -0.4740 at step 19935 (final chain energy: -0.4740)
+Phase 2: refining top 100 chain samples with full minimax optimization...
+  Refined 20/100...
+  Refined 40/100...
+  Refined 60/100...
+  Refined 80/100...
+  Refined 100/100...
+
+Best Metropolis configuration (combined score = 1.0000):
+  Box-norm. sensitivity : 1.0544  (raw 16.6719, own-ref 0.8519)
+  Spread (relative)    : 1.8156
+  Masses    : [1.351 2.229 1.073 2.8   0.916 1.457 2.837 1.812 1.032 2.516]
+  Wall k    : [0.602 3.234 0.441 4.262 0.266 0.975 0.633 6.    0.434 0.364]
+  Coupling k: [0.265 0.02  0.07  0.674 0.029 0.038 0.403 0.927 0.022]
+  Pareto-front size: 7
+  Acceptance rate: 12.20%
+floor 0.02: search=1.0544  polished iso=1.2508  swept=1.2084  min_gap=3.00 lw
+
+===== floor K_MIN = 0.05 =====
+Box-optimal uncoupled scale: 15.8114 (score 1.0 = best possible uncoupled design)
+Metropolis walk: 20000 steps, T: 3.0 → 0.01, step_size: 0.2...
+  Total accepted: 2653/20000 (13.26%)
+  Best energy: -0.4692 at step 18755 (final chain energy: -0.4189)
+Phase 2: refining top 100 chain samples with full minimax optimization...
+  Refined 20/100...
+  Refined 40/100...
+  Refined 60/100...
+  Refined 80/100...
+  Refined 100/100...
+
+Best Metropolis configuration (combined score = 1.0000):
+  Box-norm. sensitivity : 0.9945  (raw 15.7242, own-ref 0.6401)
+  Spread (relative)    : 2.2973
+  Masses    : [2.907 2.816 2.888 3.    3.    3.    2.177 3.    1.192 2.145]
+  Wall k    : [0.234 3.605 0.615 5.246 2.524 1.325 0.691 0.244 6.    6.   ]
+  Coupling k: [0.05  0.253 0.218 0.1   0.252 0.088 0.15  0.05  0.109]
+  Pareto-front size: 3
+  Acceptance rate: 13.26%
+floor 0.05: search=0.9945  polished iso=1.1364  swept=1.0363  min_gap=3.00 lw
+
+===== floor K_MIN = 0.1 =====
+Box-optimal uncoupled scale: 15.8114 (score 1.0 = best possible uncoupled design)
+Metropolis walk: 20000 steps, T: 3.0 → 0.01, step_size: 0.2...
+  Step 16000/20000 | T=0.0313 | E=-0.0187 | accept rate so far: 14.84%
+  Total accepted: 2426/20000 (12.13%)
+  Best energy: -0.3161 at step 17821 (final chain energy: -0.3093)
+Phase 2: refining top 100 chain samples with full minimax optimization...
+  Refined 20/100...
+  Refined 40/100...
+  Refined 60/100...
+  Refined 80/100...
+  Refined 100/100...
+
+Best Metropolis configuration (combined score = 1.0000):
+  Box-norm. sensitivity : 1.1276  (raw 17.8284, own-ref 0.9151)
+  Spread (relative)    : 1.6777
+  Masses    : [2.671 1.88  1.543 3.    1.588 2.89  2.609 0.493 2.256 1.149]
+  Wall k    : [0.35  6.    0.2   1.204 0.74  3.194 4.779 0.403 0.38  5.327]
+  Coupling k: [0.372 0.108 0.231 0.282 0.375 0.45  0.304 0.201 0.28 ]
+  Pareto-front size: 9
+  Acceptance rate: 12.13%
+floor 0.1: search=1.1276  polished iso=1.3264  swept=1.0812  min_gap=3.00 lw
+
+===== floor K_MIN = 0.2 =====
+Box-optimal uncoupled scale: 15.8114 (score 1.0 = best possible uncoupled design)
+Metropolis walk: 20000 steps, T: 3.0 → 0.01, step_size: 0.2...
+  Step 4000/20000 | T=0.9590 | E=0.7808 | accept rate so far: 21.45%
+  Total accepted: 2410/20000 (12.05%)
+  Best energy: -0.2925 at step 18924 (final chain energy: -0.2731)
+Phase 2: refining top 100 chain samples with full minimax optimization...
+  Refined 20/100...
+  Refined 40/100...
+  Refined 60/100...
+  Refined 80/100...
+  Refined 100/100...
+
+Best Metropolis configuration (combined score = 1.0000):
+  Box-norm. sensitivity : 1.1125  (raw 17.5896, own-ref 0.8906)
+  Spread (relative)    : 1.8794
+  Masses    : [0.846 3.    2.906 1.974 3.    2.305 0.744 3.    3.    0.791]
+  Wall k    : [0.2   4.471 0.713 5.912 0.229 0.746 0.2   3.214 5.622 4.533]
+  Coupling k: [0.235 0.579 0.4   0.331 0.533 0.26  0.291 0.273 0.522]
+  Pareto-front size: 8
+  Acceptance rate: 12.05%
+floor 0.2: search=1.1125  polished iso=1.1756  swept=1.0195  min_gap=3.00 lw
+
+===== floor K_MIN = 0.5 =====
+Box-optimal uncoupled scale: 15.8114 (score 1.0 = best possible uncoupled design)
+Metropolis walk: 20000 steps, T: 3.0 → 0.01, step_size: 0.2...
+  Total accepted: 2654/20000 (13.27%)
+  Best energy: -0.1919 at step 19870 (final chain energy: -0.1919)
+Phase 2: refining top 100 chain samples with full minimax optimization...
+  Refined 20/100...
+  Refined 40/100...
+  Refined 60/100...
+  Refined 80/100...
+  Refined 100/100...
+
+Best Metropolis configuration (combined score = 1.0000):
+  Box-norm. sensitivity : 0.9549  (raw 15.0982, own-ref 1.1234)
+  Spread (relative)    : 3.5171
+  Masses    : [0.157 2.398 0.38  2.677 1.289 0.815 2.505 3.    1.225 2.01 ]
+  Wall k    : [6.    0.413 4.179 0.342 2.729 6.    0.564 6.    0.808 1.809]
+  Coupling k: [0.505 1.    0.57  0.5   0.682 0.577 0.512 0.648 0.92 ]
+  Pareto-front size: 4
+  Acceptance rate: 13.27%
+floor 0.5: search=0.9549  polished iso=1.0230  swept=0.9257  min_gap=3.00 lw
+
+===== ROUTE 3 SUMMARY =====
+floor   search   iso     swept   min_gap
+0.01    1.0351  1.1251  1.0385  3.00
+0.02    1.0544  1.2508  1.2084  3.00
+0.05    0.9945  1.1364  1.0363  3.00
+0.1     1.1276  1.3264  1.0812  3.00
+0.2     1.1125  1.1756  1.0195  3.00
+0.5     0.9549  1.0230  0.9257  3.00

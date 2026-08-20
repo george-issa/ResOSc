@@ -1,0 +1,32 @@
+
+=== Metropolis Monte Carlo ===
+Metropolis walk: 20000 steps, T: 3.0 → 0.01, step_size: 0.4...
+  Step 4000/20000 | T=0.9590 | E=-0.6364 | accept rate so far: 90.53%
+  Step 8000/20000 | T=0.3064 | E=-0.3663 | accept rate so far: 84.91%
+  Step 12000/20000 | T=0.0979 | E=-0.6307 | accept rate so far: 76.98%
+  Step 16000/20000 | T=0.0313 | E=-1.3000 | accept rate so far: 63.96%
+  Step 20000/20000 | T=0.0100 | E=-1.5592 | accept rate so far: 52.15%
+  Total accepted: 10431/20000 (52.15%)
+  Best energy: -1.5655 at step 19784 (final chain energy: -1.5592)
+Phase 2: refining top 100 chain samples with full minimax optimization...
+  Refined 20/100...
+  Refined 40/100...
+  Refined 60/100...
+  Refined 80/100...
+  Refined 100/100...
+
+Best Metropolis configuration (combined score = 0.5618):
+  Norm. min sensitivity : 6.1916  (raw 30.6152)
+  Spread (relative)    : 3.6139
+  Masses    : [3.    1.699 2.508 3.    2.777 0.994 3.    2.504 3.    0.1  ]
+  Wall k    : [0.2   0.249 0.389 0.342 0.364 6.    0.2   1.867 6.    0.2  ]
+  Coupling k: [0.004 0.012 0.004 0.001 0.001 0.001 0.002 0.457 0.024]
+  Pareto-front size: 15
+  Acceptance rate: 52.15%
+  Metropolis MC finished in 3m 24s (204.3s)
+
+=== Total wall time: 3m 24s ===
+
+Results saved to: /Users/gissa/Documents/Nancy/ResOSc/results-mc/mc_results_v4_normobj.pkl
+Transfer this file to your laptop and plot with:
+  python plot_mc.py --input results-mc/mc_results_v4_normobj.pkl

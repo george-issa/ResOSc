@@ -1,0 +1,51 @@
+
+=== Random Monte Carlo ===
+Phase 1: screening 20000 random configurations...
+  Valid: 20000/20000
+Phase 2: refining top 100 candidates with full minimax optimization...
+  Refined 20/100...
+  Refined 40/100...
+  Refined 60/100...
+  Refined 80/100...
+  Refined 100/100...
+
+Best configuration (combined score = 0.6756):
+  Min sensitivity       : 11.6127
+  Spread (relative)    : 1.2905
+  Masses    : [0.712 1.295 1.392 0.479 1.155 0.498 1.377 1.389 0.633 1.154]
+  Wall k    : [0.544 0.756 2.121 2.682 0.528 0.609 1.403 2.989 1.143 1.368]
+  Coupling k: [0.349 0.778 0.142 0.057 0.063 0.125 0.815 0.502 0.073]
+  Pareto-front size: 7
+  Random MC finished in 4m 3s (243.5s)
+
+=== Metropolis Monte Carlo ===
+Metropolis walk: 20000 steps, T: 3.0 → 0.01, step_size: 0.4...
+  Step 4000/20000 | T=0.9590 | E=-0.9697 | accept rate so far: 87.42%
+  Step 8000/20000 | T=0.3064 | E=-0.5210 | accept rate so far: 78.85%
+  Step 12000/20000 | T=0.0979 | E=-1.2599 | accept rate so far: 69.30%
+  Step 16000/20000 | T=0.0313 | E=-1.5345 | accept rate so far: 56.94%
+  Step 20000/20000 | T=0.0100 | E=-1.7922 | accept rate so far: 46.31%
+  Total accepted: 9263/20000 (46.31%)
+  Best energy: -1.7922 at step 19838 (final chain energy: -1.7922)
+Phase 2: refining top 100 chain samples with full minimax optimization...
+  Refined 20/100...
+  Refined 40/100...
+  Refined 60/100...
+  Refined 80/100...
+  Refined 100/100...
+
+Best Metropolis configuration (combined score = 0.6828):
+  Min sensitivity       : 16.4574
+  Spread (relative)    : 1.9683
+  Masses    : [1.5   1.191 0.87  1.5   1.017 1.5   1.5   1.35  0.528 1.5  ]
+  Wall k    : [0.574 2.843 0.66  1.764 0.5   1.472 0.5   0.5   3.    0.5  ]
+  Coupling k: [0.026 0.06  0.072 0.01  0.101 0.047 0.01  0.04  0.013]
+  Pareto-front size: 9
+  Acceptance rate: 46.31%
+  Metropolis MC finished in 3m 43s (223.8s)
+
+=== Total wall time: 7m 47s ===
+
+Results saved to: /Users/gissa/Documents/Nancy/ResOSc/results-mc/mc_results_v2.pkl
+Transfer this file to your laptop and plot with:
+  python plot_mc.py --input results-mc/mc_results_v2.pkl
