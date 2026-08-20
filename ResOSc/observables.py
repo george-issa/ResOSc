@@ -262,14 +262,35 @@ def optimize_observable(system, reference=None):
         S = np.abs(c) * peaks
         return -np.min(S)
 
-    # Try multiple random starting points and keep the best
+    # Sign-equalizer warm start: choose c = sigma/b and w = A^-1 c over all
+    # sign patterns sigma, keeping the smallest-norm w.  This is a feasible
+    # construction (every mode attains min_i S_i simultaneously), exact when
+    # the modes are orthonormal, and Nelder-Mead can only improve on it —
+    # random restarts alone were observed to undershoot the optimum.
+    starts = []
+    peaks_safe = np.all(peaks > 0)
+    if peaks_safe and n <= 12:
+        try:
+            n_sig = 2 ** (n - 1)
+            sigs = np.ones((n, n_sig))
+            for s in range(n_sig):
+                for i in range(n - 1):
+                    if (s >> i) & 1:
+                        sigs[i, s] = -1.0
+            W = np.linalg.solve(system.eigenvectors, sigs / peaks[:, None])
+            w_eq = W[:, np.linalg.norm(W, axis=0).argmin()]
+            starts.append(w_eq / np.linalg.norm(w_eq))
+        except np.linalg.LinAlgError:
+            pass
+
+    # Multiple random starting points; keep the best overall
     best_result = None
     best_val = np.inf
     rng = np.random.default_rng(42)
+    starts += [rng.standard_normal(n) for _ in range(50)]
 
-    for _ in range(50):
-        w0 = rng.standard_normal(n)
-        w0 /= np.linalg.norm(w0)
+    for w0 in starts:
+        w0 = w0 / np.linalg.norm(w0)
         res = minimize(neg_min_sensitivity, w0, method='Nelder-Mead',
                        options={'maxiter': 10000, 'xatol': 1e-10, 'fatol': 1e-10})
         if res.fun < best_val:
