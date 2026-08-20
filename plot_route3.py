@@ -31,24 +31,19 @@ iso    = np.array([r['iso'] for r in rows])
 swept  = np.array([r['swept'] for r in rows])
 
 fig, ax = plt.subplots(figsize=(8.6, 5.6))
-fig.subplots_adjust(left=0.09, right=0.97, top=0.78, bottom=0.12)
+fig.subplots_adjust(left=0.09, right=0.97, top=0.90, bottom=0.12)
 
-fig.suptitle('Best achievable sensitivity vs parasitic coupling floor',
-             fontsize=13, color=INK, x=0.09, ha='left', y=0.975)
-fig.text(0.09, 0.90,
-         'All nine bonds forced ≥ the floor; every design satisfies the 3-linewidth '
-         'resolvability constraint.\nScores are relative to the universal uncoupled '
-         'bound (search + floor-constrained polish, n = 10, strain forcing).',
-         fontsize=9, color=INK2, va='top')
+fig.suptitle('Best achievable sensitivity vs coupling floor',
+             fontsize=13, color=INK, x=0.09, ha='left', y=0.965)
 
 ax.axhline(1.0, color=MUTED, lw=1.2, ls=(0, (5, 3)), zorder=1)
 ax.text(floors[0], 1.003, ' uncoupled bound', color=MUTED, fontsize=8, va='bottom')
 
 ax.plot(floors, iso, color=BLUE, lw=2, marker='o', ms=6, zorder=3,
-        label='isolated-peak metric')
+        label='one peak metric')
 ax.plot(floors, swept, color=ORANGE, lw=2, marker='o', ms=6, zorder=3,
-        label='swept metric (conservative)')
-ax.annotate('isolated-peak', (floors[-1], iso[-1]), xytext=(6, 4),
+        label='swept metric (more conservative)')
+ax.annotate('one peak', (floors[-1], iso[-1]), xytext=(6, 4),
             textcoords='offset points', color=INK2, fontsize=9)
 ax.annotate('swept', (floors[-1], swept[-1]), xytext=(6, -10),
             textcoords='offset points', color=INK2, fontsize=9)
