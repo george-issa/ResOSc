@@ -178,6 +178,6 @@ axF.set_ylabel(r'observable response $|O(\omega)|$')
 axF.set_title('Response of the optimal observable: every resonance beats the uncoupled bound',
               color=INK, loc='left')
 
-fig.savefig('/Users/gissa/Documents/Nancy/ResOSc/results-mc/route3_champion.pdf')
-fig.savefig('/Users/gissa/Documents/Nancy/ResOSc/results-mc/route3_champion.png', dpi=150)
-print('saved route3_champion.pdf/.png')
+fig.savefig('/Users/gissa/Documents/Nancy/ResOSc/results-mc/best_config.pdf')
+fig.savefig('/Users/gissa/Documents/Nancy/ResOSc/results-mc/best_config.png', dpi=150)
+print('saved best_config.pdf/.png')

@@ -55,6 +55,6 @@ ax.set_xlabel('coupling floor $k_\\mathrm{min}$ (all bonds $\\geq k_\\mathrm{min
 ax.set_ylabel('best $S\\,/\\,S_\\mathrm{unc}$')
 ax.legend(loc='upper right', frameon=False, fontsize=9, labelcolor=INK2)
 
-fig.savefig('/Users/gissa/Documents/Nancy/ResOSc/results-mc/route3_curve.pdf')
-fig.savefig('/Users/gissa/Documents/Nancy/ResOSc/results-mc/route3_curve.png', dpi=160)
-print('saved route3_curve.pdf/.png')
+fig.savefig('/Users/gissa/Documents/Nancy/ResOSc/results-mc/min_couple_configs.pdf')
+fig.savefig('/Users/gissa/Documents/Nancy/ResOSc/results-mc/min_couple_configs.png', dpi=160)
+print('saved min_couple_configs.pdf/.png')
