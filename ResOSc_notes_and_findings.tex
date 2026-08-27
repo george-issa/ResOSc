@@ -29,6 +29,9 @@
 \newcommand{\bref}{b_{i,\refsys}}
 \newcommand{\refscale}{\mathrm{ref\_scale}}
 
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+
 % ------------------------------------------------------------------ %
 \title{\textbf{Notes on sensor array nearest neighbor interaction theory project}\\[0.4em]
   \large Resonant Coupled Oscillator Simulator \\
@@ -61,6 +64,144 @@ springs $k_{i,i+1}$, the package:
         configurations that simultaneously maximize sensitivity and frequency
         coverage.
 \end{enumerate}
+
+\subsection{Roadmap: From Dimensionless Theory to a Physical Detector
+Forecast}
+\label{sec:roadmap}
+
+The results in these notes were first developed in dimensionless units with
+an amplitude-based figure of merit.  The programme now underway grounds the
+pipeline in the physical framework of the companion note \emph{SNR of a
+Multimode Mechanical Detector} and the levitated-sensor detector (LSD)
+platform [Aggarwal \emph{et al.}, PRL \textbf{128}, 111101 (2022);
+arXiv:2010.13157], targeting the science case of planetary-mass primordial
+black hole (PBH) binaries [Miller \emph{et al.}, PRL \textbf{133}, 111401
+(2024)] and weakly interacting (``gentle'') dark matter.  The plan:
+
+\begin{enumerate}[noitemsep]
+  \item \textbf{Objective.}  Replace the amplitude minimax by the
+        matched-filter signal-to-noise ratio
+        $\rho^2 = 4\int |\tilde h(f)|^2 / S_h(f)\, df$, reported as a
+        \emph{horizon distance} $d_{\max}(\mathcal{M}_c)$ for benchmark PBH
+        chirp masses (inspiral spectrum
+        $|\tilde h|^2 = \mathcal{A}^2 f^{-7/3}$), and as minimum detectable
+        impulse / coupling for the dark-matter channels.  The full
+        transfer-function integral treats overlapping resonances exactly,
+        retiring the isolated-peak/swept metric dichotomy of
+        Sec.~\ref{sec:universal-bound}; the resolvability condition survives
+        only as the validity criterion of the per-mode approximation.  The
+        broadband source spectrum also subsumes the former ad-hoc
+        frequency-spread objective.
+  \item \textbf{Noise model.}  Thermal force noise from the
+        fluctuation--dissipation theorem
+        ($S_F = 4k_BT m_i\gamma_i$, uncorrelated in UHV) plus readout shot
+        noise, combined into the strain-referred PSD
+        $S_h(f) = S_O^{\mathrm{noise}}(f)/|T(f)|^2$.
+  \item \textbf{Two readouts, compared.}  Readout A (axial cavity probe:
+        one channel, weights fixed by the intracavity field --- design
+        freedom is purely mechanical) and Readout B (transverse imaging:
+        $N$ channels, freely optimizable weights and probe-power
+        allocation).  Both are computed for every design; thermal- and
+        readout-limited regimes are both evaluated, with the crossover
+        frequency reported.
+  \item \textbf{Units and benchmark.}  SI throughout; the benchmark
+        parameter block follows the LSD proposal (stacked SiO$_2$/Si discs,
+        $r = 75\,\mu$m, trap frequencies 10--100~kHz,
+        $P = 10^{-11}$~Torr, $L = 10$~m cavity, damping
+        0.17--1.7~Hz, target $\sqrt{S_h}\sim 10^{-21}$--$10^{-22}\,
+        \mathrm{Hz}^{-1/2}$), with unconfirmed entries (disc mass, detected
+        powers, quantum efficiency, cavity pole, effective temperature)
+        flagged for confirmation.
+  \item \textbf{Physical coupling constraints.}  Couplings are
+        parameterized by mechanism rather than free box bounds; the first
+        implementation uses Coulomb coupling between charged particles
+        ($k_{ij} \propto q_i q_j / d_{ij}^3$, long-range tails included),
+        whose stray-charge floor gives the coupling-floor constraint of the
+        route-3 study its physical origin.  Optical-binding (correlated
+        noise) and cavity-mediated (non-symmetric stiffness) couplings are
+        documented extensions.
+  \item \textbf{Deliverable.}  Sensitivity curves $\sqrt{S_h(f)}$ and PBH
+        horizon distances for optimized coupled arrays versus the best
+        uncoupled array, under laboratory parameters --- restating the
+        coupled-vs-uncoupled questions of these notes in units a lab can
+        act on.
+\end{enumerate}
+
+\begin{table}[h]
+\centering
+\caption{The two readout strategies (companion note Sec.~8) and their
+consequences for the optimization pipeline.  Both observe the same
+resonant motion of the coupled array; they differ in what may be
+optimized and in the readout-noise shape.}
+\label{tab:readouts}
+\begin{tabular}{@{}p{0.24\linewidth}p{0.34\linewidth}p{0.34\linewidth}@{}}
+\toprule
+ & \textbf{Readout A (cavity)} & \textbf{Readout B (imaging)} \\
+\midrule
+Geometry & axial cavity probe, $\lambda = 1064$\,nm &
+  transverse imaging, $\lambda = 532$\,nm \\
+Channels & 1 (one optical phase) & $N$ (one per particle) \\
+Weights $w_i$ & \emph{fixed} by the intracavity field,
+  $\mathbf{w} = \mathbf{g}/|\mathbf{g}|$ & free post-processing choice \\
+Readout noise & white phase shot noise; rises above the cavity pole as
+  $1 + (f/f_{\mathrm{cav}})^2$ & flat per-particle shot noise
+  $S_i^{\mathrm{ro}}$; probe-power allocation $P_i^{\mathrm{sc}}$ is an
+  extra design knob \\
+Pipeline freedom & mechanics only: mode shapes must be engineered to
+  align with $\mathbf{g}$ (a mode with $N_n = 0$ is invisible) &
+  mechanics $+$ weights ($w_i^{\star} \propto V_{in}/S_i^{\mathrm{ro}}$
+  per mode) $+$ power allocation \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{Benchmark platform parameters implemented in
+\texttt{ResOSc/physical.py} (\texttt{LSD\_BENCHMARK}).  Status:
+\emph{published} = LSD proposal [PRL \textbf{128}, 111101];
+\emph{note} = companion SNR note; \emph{estimated} = derived here;
+\emph{TBC} = placeholder awaiting confirmation.}
+\label{tab:benchmark}
+\begin{tabular}{@{}llll@{}}
+\toprule
+Parameter & Symbol & Value & Status \\
+\midrule
+Trap frequency        & $f_{\mathrm{trap}}$ & 10 / 100\,kHz cases & published \\
+Gas pressure          & $P$        & $10^{-11}$\,Torr     & published \\
+Temperature           & $T$        & 300\,K (4\,K opt.)  & published$^{\dag}$ \\
+Cavity baseline       & $L$        & 10\,m                & published \\
+Damping linewidth     & $\gamma$   & 0.17--1.7\,Hz $+$ 0.005--0.05\,Hz recoil & published \\
+Disc geometry         & ---        & $r = 75\,\mu$m; SiO$_2$ 14.58\,$\mu$m $+$ Si 110\,nm & published \\
+Probe wavelengths     & $\lambda_{\mathrm{probe}}, \lambda_{\mathrm{ro}}$ & 1064 / 532\,nm & note \\
+Imaging aperture      & NA         & 0.1                  & note \\
+Particle spacing      & $d$        & 15.5\,$\mu$m         & note \\
+Disc mass             & $m$        & $5.8\times10^{-10}$\,kg & \textbf{estimated} \\
+Detected power (A)    & $P_{\mathrm{det}}$ & 1\,mW        & \textbf{TBC} \\
+Collected power (B)   & $P_i^{\mathrm{sc}}$ & 1\,$\mu$W   & \textbf{TBC} \\
+Quantum efficiency    & $\eta_{\mathrm{det}}$ & 0.8       & \textbf{TBC} \\
+Cavity decay rate     & $\kappa$   & $2\pi \times 1$\,MHz & \textbf{TBC} \\
+Intracavity profile   & $g_i$      & uniform placeholder  & \textbf{TBC} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Parameters requiring confirmation.}  Absolute forecasts
+(horizon distances, $\sqrt{S_h}$ levels) are currently limited by six
+entries: (i)~the \textbf{disc mass} (our $0.58\,\mu$g is a geometric
+estimate from the published disc dimensions and bulk densities);
+(ii)~the \textbf{effective temperature} entering the
+fluctuation--dissipation theorem (300\,K bath vs.\ a feedback-cooled
+centre-of-mass temperature$^{\dag}$); (iii)~the \textbf{detected probe
+power} $P_{\mathrm{det}}$ for Readout A; (iv)~the per-particle
+\textbf{collected power} $P_i^{\mathrm{sc}}$ for Readout B; (v)~the
+\textbf{detector quantum efficiency} $\eta_{\mathrm{det}}$; and
+(vi)~the \textbf{cavity decay rate} $\kappa$ (equivalently the cavity
+pole $f_{\mathrm{cav}}$) and the \textbf{intracavity coupling profile}
+$g_i$, which together fix Readout A's noise and its fixed weights.
+Since $d_{\max} \propto 1/\sqrt{S_h}$, these entries move the forecasts
+multiplicatively; all relative (coupled vs.\ uncoupled) statements are
+unaffected.
 
 % ================================================================== %
 \section{System Physics}
@@ -411,6 +552,170 @@ sensitivity to each mode, and the achievable worst-case sensitivity is
 lower.  A normalized value of $< 1$ means the coupling has broken the
 correspondence and the observable cannot simultaneously reach the uncoupled
 ceiling for all modes.
+
+% ================================================================== %
+\section{The Universal Uncoupled Bound under Strain Forcing}
+\label{sec:universal-bound}
+% ================================================================== %
+
+\emph{This section re-evaluates the reference scale of
+Sec.~\ref{sec:ref} in the corrected modal basis (the $M$-orthonormal
+generalized eigenvectors adopted after the 2026-08 eigenvector fix) and
+proves that under strain forcing the reference scale is a
+\textbf{constant}: it is independent of every mass and every spring
+constant, and therefore of the entire design search.  The equalizer
+formula of Sec.~\ref{sec:ref} is unchanged; what changes is the per-mode
+gain that enters it.  The heuristic conclusion of
+Sec.~\ref{sec:ref} that coupling always lowers the achievable worst-case
+sensitivity does \emph{not} survive the corrected physics: explicit
+coupled designs exceed the bound derived here.}
+
+\subsection{Setup}
+
+An uncoupled detector is a set of $n$ independent oscillators; oscillator
+$i$ has mass $m_i$, wall spring $k_i$, and resonance
+$\omega_i^2 = k_i/m_i$.  With the constant damping-\emph{ratio} model
+used throughout (quality factor $Q = 1/2\gamma$ identical for every
+oscillator), the steady-state response to a drive $f_i \cos\omega t$ is
+\begin{equation}
+  x_i(\omega)
+  = \frac{f_i/m_i}{\omega_i^2 - \omega^2 + 2i\gamma\,\omega_i\omega}.
+  \label{eq:ub-response}
+\end{equation}
+The readout is a single linear observable
+$\mathcal{O} = \sum_j w_j x_j$ with $\|\mathbf{w}\|_2 = 1$, and the
+(isolated-peak) sensitivity to mode $i$ is the response of $\mathcal{O}$
+when driving at $\omega_i$.  Gravitational-wave strain acts through the
+wall spring: a strain $h_0$ stretches it by $h_0 L$, so
+\begin{equation}
+  f_i = k_i\, h_0 L.
+  \label{eq:ub-force}
+\end{equation}
+
+\subsection{Step 1: Peak Amplitude of One Oscillator}
+
+Setting $\omega = \omega_i$ in Eq.~\eqref{eq:ub-response}, the real part
+of the denominator vanishes and
+\begin{equation}
+  |x_i(\omega_i)|
+  = \frac{f_i/m_i}{2\gamma\,\omega_i^2}
+  = \frac{f_i}{2\gamma\, m_i \omega_i^2}
+  = \frac{f_i}{2\gamma\, k_i},
+  \label{eq:ub-peak}
+\end{equation}
+using $m_i\omega_i^2 = k_i$.  Equivalently, the peak equals $Q$ times the
+static displacement, $x_{\mathrm{peak}} = (1/2\gamma)(f/k)$.  The mass
+has already cancelled: it fixes \emph{where} the resonance sits, not the
+peak height.
+
+\subsection{Step 2: The Strain Cancellation}
+
+Inserting the strain force \eqref{eq:ub-force} into
+Eq.~\eqref{eq:ub-peak},
+\begin{equation}
+  |x_i(\omega_i)|
+  = \frac{k_i\, h_0 L}{2\gamma\, k_i}
+  = \frac{h_0 L}{2\gamma}
+  \;\equiv\; x^{*}.
+  \label{eq:ub-xstar}
+\end{equation}
+The spring constant cancels as well: a stiffer spring collects
+proportionally more force from the strain \emph{and} is proportionally
+harder to stretch, and the two effects are exact inverses.  Hence every
+uncoupled oscillator, for any $(m_i, k_i)$ whatsoever, rings with the
+identical peak amplitude $x^{*} = h_0 L / 2\gamma$.  Every parameter the
+design search can vary has vanished; only the signal scale $h_0 L$, the
+damping ratio $\gamma$, and (below) the count $n$ survive, none of which
+are design variables.  This is the precise sense in which the reference
+scale is constant over the entire design box.
+
+The same result follows in the modal formalism used by the code: the
+$M$-orthonormal mode is $v_i = e_i/\sqrt{m_i}$, the generalized force is
+$q_i = v_i^{\mathsf T} f = f_i/\sqrt{m_i}$, the modal peak is
+$b_i = q_i / (2\gamma\omega_i^2)$, and the observable overlap is
+$|\mathbf{w}^{\mathsf T} v_i| = |w_i|/\sqrt{m_i}$; multiplying, the
+$\sqrt{m_i}$ factors cancel and
+$S_i(\mathbf{w}) = |w_i|\, f_i/(2\gamma k_i) = |w_i|\, x^{*}$.
+
+\subsection{Step 3: Minimax over Readout Weights}
+
+The worst-case sensitivity of the observable is
+$S(\mathbf{w}) = \min_i |w_i|\, x^{*}$, and the reference scale is its
+maximum over unit weight vectors:
+\begin{equation}
+  S_{\refsys}
+  = x^{*} \cdot \max_{\|\mathbf{w}\|_2 = 1}\ \min_i\, |w_i|.
+\end{equation}
+
+\begin{lemma}[Equalizer]
+\label{lem:equalizer}
+$\displaystyle \max_{\|\mathbf{w}\|_2 = 1}\ \min_i |w_i| =
+\frac{1}{\sqrt{n}}$.
+\end{lemma}
+
+\begin{proof}
+For any unit vector, the smallest of the $n$ numbers $w_i^2$ cannot
+exceed their average:
+$\min_i w_i^2 \le \tfrac{1}{n}\sum_i w_i^2 = \tfrac{1}{n}$, hence
+$\min_i |w_i| \le 1/\sqrt{n}$.  The uniform vector $w_i = 1/\sqrt{n}$
+attains the bound.
+\end{proof}
+
+For unequal per-mode gains $g_i$ the same argument (saturating every
+constraint, $w_i = t/g_i$) yields the general closed form
+$S_{\refsys} = 1/\sqrt{\sum_i g_i^{-2}}$ of Sec.~\ref{sec:ref}, with
+$g_i = f_i/(2\gamma k_i)$ in the corrected basis; strain forcing is the
+special case $g_i \equiv x^{*}$.
+
+\begin{proposition}[Universal uncoupled bound]
+\label{prop:universal-bound}
+Under strain forcing and the constant-$Q$ damping model, every uncoupled
+detector of $n$ oscillators has the same optimal worst-case sensitivity,
+\begin{equation}
+  \boxed{\;
+  S_{\refsys} \;=\; \frac{h_0 L}{2\gamma\sqrt{n}}
+  \;}
+  \label{eq:universal-bound}
+\end{equation}
+independent of all masses and spring constants.  For the parameters used
+throughout these notes ($h_0 = L = 1$, $\gamma = 0.01$, $n = 10$),
+\begin{equation}
+  S_{\refsys} = \frac{1}{0.02\sqrt{10}} = \frac{50}{\sqrt{10}}
+  = 5\sqrt{10} \approx 15.8114,
+\end{equation}
+verified numerically to four decimals by the full minimax optimization on
+randomly drawn uncoupled designs.
+\end{proposition}
+
+\subsection{Scope of the Result}
+
+Three assumptions delimit where the constancy holds.
+\begin{enumerate}[noitemsep]
+  \item \textbf{Strain forcing.}  For a uniform (momentum-kick) force
+        the drive does not scale with $k_i$, the cancellation in
+        Eq.~\eqref{eq:ub-xstar} fails, and the uncoupled optimum
+        becomes design-dependent ($g_i = h_0 L / 2\gamma k_i$, maximized
+        at the softest admissible springs).
+  \item \textbf{Constant-$Q$ damping.}  If $\gamma$ varied per
+        oscillator (e.g.\ constant absolute linewidth), $Q$ would not
+        cancel uniformly and the bound would again be design-dependent.
+  \item \textbf{Isolated-peak metric.}  Each mode is read at its own
+        resonance, neglecting the tails of neighboring peaks.  Under the
+        full swept response, uncoupled designs with bare frequencies
+        stacked within a linewidth can exceed $x^{*}/\sqrt{n}$ by
+        coherent addition (up to a factor $\sqrt{n}$ in the fully
+        degenerate limit), because one merged response is counted once
+        per mode.  All quoted comparisons therefore impose a
+        resolvability constraint (adjacent mode gaps of at least a few
+        linewidths), under which the isolated-peak evaluation is
+        accurate and the bound \eqref{eq:universal-bound} applies.
+\end{enumerate}
+
+Because Eq.~\eqref{eq:universal-bound} contains no design parameters,
+any coupled configuration whose worst-case sensitivity exceeds
+$S_{\refsys}$ beats \emph{every possible} uncoupled detector in the
+same setting --- the normalization used by the box-normalized searches;
+and such configurations exist.
 
 % ================================================================== %
 \section{Monte Carlo Parameter Optimization}
