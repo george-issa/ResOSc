@@ -13,8 +13,12 @@ Reproduces the session results of 2026-08-20:
     python3 polish_one_bond.py --min-gap 3 --out results-mc/one_bond_champion_resolvable.npy
         -> iso 1.0951 / swept 1.0179, min gap 3.00 lw (the quotable design)
 """
+import os as _os, sys as _sys
+_ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
+_sys.path.insert(0, _ROOT)
+_os.chdir(_ROOT)
 import sys, os
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+pass  # path handled by _ROOT header
 import argparse
 import pickle
 import numpy as np

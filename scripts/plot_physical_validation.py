@@ -4,8 +4,12 @@
 3) numerical matched-filter SNR vs the analytic narrow-linewidth formula
 4) benchmark single-disc sqrt(S_h) curve vs the LSD target band
 """
+import os as _os, sys as _sys
+_ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
+_sys.path.insert(0, _ROOT)
+_os.chdir(_ROOT)
 import sys, os
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+pass  # path handled by _ROOT header
 import numpy as np
 import matplotlib
 matplotlib.use('Agg')
@@ -32,10 +36,8 @@ plt.rcParams.update({
 })
 
 fig, axes = plt.subplots(2, 2, figsize=(11.0, 8.2))
-fig.subplots_adjust(left=0.075, right=0.97, top=0.90, bottom=0.08,
+fig.subplots_adjust(left=0.075, right=0.97, top=0.95, bottom=0.08,
                     hspace=0.42, wspace=0.28)
-fig.suptitle('physical.py validation suite — all tests passing',
-             fontsize=13, color=INK, x=0.075, ha='left', y=0.97)
 
 # ---- 1) FDT thermal peak ---------------------------------------------------- #
 ax = axes[0, 0]
@@ -47,8 +49,8 @@ w0, Q = 2*np.pi*f0, f0/g_hz
 Sx_ref = 4*KB*T*Q/(m*w0**3)
 ax.semilogy(f - f0, Sx, color=BLUE, lw=1.8, label='computed $S_x(f)$')
 ax.scatter([0.0], [Sx_ref], s=70, color=ORANGE, zorder=5, marker='D',
-           label=r'textbook $4k_BTQ/(m\omega_0^3)$')
-ax.set_title('1)  FDT thermal peak — agreement to $10^{-6}$', loc='left', color=INK)
+           label=r'analytic $4k_BTQ/(m\omega_0^3)$')
+ax.set_title('1)  FDT thermal peak', loc='left', color=INK)
 ax.set_xlabel(r'$f - f_0$  [Hz]')
 ax.set_ylabel(r'$S_x$  [m$^2$/Hz]')
 ax.legend(frameon=False, fontsize=8, labelcolor=INK2)
@@ -70,13 +72,13 @@ for j in range(4):
     wv = rng.standard_normal(n); wv /= np.linalg.norm(wv)
     Sh = np.sqrt(arr.S_h(f, wv, 0.0))
     vals.append(np.sqrt(arr.S_h(np.array([fn]), wv, 0.0))[0])
-    ax.semilogy(f - fn, Sh, lw=1.5, alpha=0.85,
-                label=f'random $\\mathbf{{w}}_{{{j+1}}}$')
-spread = (max(vals) - min(vals)) / min(vals)
-ax.set_title(f'2)  thermal $\\sqrt{{S_h}}$ on resonance is weight-independent '
-             f'(spread {spread:.0e})', loc='left', color=INK)
+    ax.plot(f - fn, Sh * 1e18, lw=1.5, alpha=0.85,
+            label=f'random $\\mathbf{{w}}_{{{j+1}}}$')
+ax.yaxis.set_major_formatter(matplotlib.ticker.FormatStrFormatter('%.4f'))
+ax.set_title('2)  thermal $\\sqrt{S_h}$ on resonance is weight-independent',
+             loc='left', color=INK)
 ax.set_xlabel(r'$f - f_n$  [Hz]')
-ax.set_ylabel(r'$\sqrt{S_h}$  [Hz$^{-1/2}$]')
+ax.set_ylabel(r'$\sqrt{S_h}$  [$10^{-18}$ Hz$^{-1/2}$]')
 ax.legend(frameon=False, fontsize=8, labelcolor=INK2)
 
 # ---- 3) numerical SNR vs analytic narrow-linewidth formula ------------------ #
@@ -103,7 +105,7 @@ ax.set_title(f'3)  matched-filter SNR: numerical/analytic = '
              f'{np.sqrt(cum[-1]/rho2_an):.4f}', loc='left', color=INK)
 ax.set_xlabel(r'$(f - f_n)/\Gamma_n$')
 ax.set_ylabel(r'$\rho^2 / \rho^2_{\rm analytic}$')
-ax.legend(frameon=False, fontsize=8, labelcolor=INK2, loc='lower right')
+ax.legend(frameon=False, fontsize=8, labelcolor=INK2, loc='center left')
 
 # ---- 4) benchmark sqrt(S_h) vs LSD target ----------------------------------- #
 ax = axes[1, 1]
@@ -114,7 +116,8 @@ ax.loglog(f, Sh, color=BLUE, lw=1.8, label='benchmark disc (300 K, thermal)')
 ax.axhspan(1e-22, 1e-21, color=AQUA, alpha=0.18, lw=0)
 ax.text(5.3e4, 3e-22, 'LSD target band', color=INK2, fontsize=8)
 i = np.argmin(Sh)
-ax.annotate(f'on resonance: {Sh[i]:.1e}', (f[i], Sh[i]), xytext=(8, -14),
+ax.annotate(f'thermal-limited level: {Sh[i]:.1e} (flat across the band)',
+            (f[i], Sh[i]), xytext=(8, -14),
             textcoords='offset points', color=INK2, fontsize=8)
 ax.set_title('4)  benchmark $\\sqrt{S_h}$ — gap = unconfirmed parameters',
              loc='left', color=INK)
@@ -122,6 +125,6 @@ ax.set_xlabel(r'$f$  [Hz]')
 ax.set_ylabel(r'$\sqrt{S_h}$  [Hz$^{-1/2}$]')
 ax.legend(frameon=False, fontsize=8, labelcolor=INK2)
 
-fig.savefig('results-mc/physical_validation.pdf')
-fig.savefig('results-mc/physical_validation.png', dpi=150)
-print('saved results-mc/physical_validation.pdf/.png')
+fig.savefig('results-mc/phys_sanity.pdf')
+fig.savefig('results-mc/phys_sanity.png', dpi=150)
+print('saved results-mc/phys_sanity.pdf/.png')

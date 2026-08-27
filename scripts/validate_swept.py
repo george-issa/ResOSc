@@ -13,6 +13,10 @@ resonance, for the coupled winner and its uncoupled reference, both with the
 stored/analytic weights and with weights re-optimized for the swept metric
 (50-restart Nelder-Mead, same protocol as optimize_observable).
 """
+import os as _os, sys as _sys
+_ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
+_sys.path.insert(0, _ROOT)
+_os.chdir(_ROOT)
 import sys
 sys.path.insert(0, '/Users/gissa/Documents/Nancy/ResOSc')
 import pickle

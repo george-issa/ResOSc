@@ -177,6 +177,9 @@ Probe wavelengths     & $\lambda_{\mathrm{probe}}, \lambda_{\mathrm{ro}}$ & 1064
 Imaging aperture      & NA         & 0.1                  & note \\
 Particle spacing      & $d$        & 15.5\,$\mu$m         & note \\
 Disc mass             & $m$        & $5.8\times10^{-10}$\,kg & \textbf{estimated} \\
+Coupling mechanism    & $k_{ij}$   & Coulomb: $2q_iq_j/(4\pi\varepsilon_0 d_{ij}^3)$ & design variable \\
+Achievable charge     & $q_i$      & range TBC (units of $e$) & \textbf{TBC} \\
+Stray-charge floor    & $q_{\min}$ & TBC (sets minimum $|k_{ij}|$) & \textbf{TBC} \\
 Detected power (A)    & $P_{\mathrm{det}}$ & 1\,mW        & \textbf{TBC} \\
 Collected power (B)   & $P_i^{\mathrm{sc}}$ & 1\,$\mu$W   & \textbf{TBC} \\
 Quantum efficiency    & $\eta_{\mathrm{det}}$ & 0.8       & \textbf{TBC} \\
@@ -198,7 +201,11 @@ power} $P_{\mathrm{det}}$ for Readout A; (iv)~the per-particle
 \textbf{detector quantum efficiency} $\eta_{\mathrm{det}}$; and
 (vi)~the \textbf{cavity decay rate} $\kappa$ (equivalently the cavity
 pole $f_{\mathrm{cav}}$) and the \textbf{intracavity coupling profile}
-$g_i$, which together fix Readout A's noise and its fixed weights.
+$g_i$, which together fix Readout A's noise and its fixed weights; and
+(vii)~the \textbf{controllable charge range and stray-charge floor} for
+the Coulomb coupling --- the former bounds the coupling design space,
+the latter is the physical origin of the coupling-floor constraint in
+the route-3 study.
 Since $d_{\max} \propto 1/\sqrt{S_h}$, these entries move the forecasts
 multiplicatively; all relative (coupled vs.\ uncoupled) statements are
 unaffected.

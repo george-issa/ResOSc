@@ -7,6 +7,10 @@ lab cannot switch parasitic couplings off).  Pipeline per floor:
   3. swept-metric evaluation of the polished design (conservative number)
 Results -> results-mc/route3_sweep.pkl
 """
+import os as _os, sys as _sys
+_ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
+_sys.path.insert(0, _ROOT)
+_os.chdir(_ROOT)
 import sys
 sys.path.insert(0, '/Users/gissa/Documents/Nancy/ResOSc')
 import os, pickle

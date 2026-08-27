@@ -1,6 +1,10 @@
 """Portrait of the route-3 champion (coupling floor 0.02, swept 1.208):
 parameters, normal-mode states, spectra, and the swept observable response
 with every resonance above the universal uncoupled bound."""
+import os as _os, sys as _sys
+_ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
+_sys.path.insert(0, _ROOT)
+_os.chdir(_ROOT)
 import sys
 sys.path.insert(0, '/Users/gissa/Documents/Nancy/ResOSc')
 import pickle
