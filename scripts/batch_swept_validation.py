@@ -4,6 +4,10 @@ under the full swept response for both the coupled system and its uncoupled
 reference (identical 50-restart Nelder-Mead), and report the swept-normalized
 sensitivity. Results saved to results-mc/swept_validation.pkl.
 """
+import os as _os, sys as _sys
+_ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
+_sys.path.insert(0, _ROOT)
+_os.chdir(_ROOT)
 import sys, os
 sys.path.insert(0, '/Users/gissa/Documents/Nancy/ResOSc')
 os.chdir('/Users/gissa/Documents/Nancy/ResOSc')

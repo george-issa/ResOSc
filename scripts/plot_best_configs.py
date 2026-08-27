@@ -11,6 +11,10 @@ be overlaid as the highlighted design via --champion.
         --stem results-mc/mc_best_configs_v7 \
         --champion results-mc/one_bond_champion_resolvable.npy
 """
+import os as _os, sys as _sys
+_ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
+_sys.path.insert(0, _ROOT)
+_os.chdir(_ROOT)
 import sys, os
 sys.path.insert(0, '/Users/gissa/Documents/Nancy/ResOSc')
 import argparse

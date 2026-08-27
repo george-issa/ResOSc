@@ -1,4 +1,8 @@
 """Route-3 summary figure: best achievable S/S_unc vs parasitic coupling floor."""
+import os as _os, sys as _sys
+_ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
+_sys.path.insert(0, _ROOT)
+_os.chdir(_ROOT)
 import sys
 sys.path.insert(0, '/Users/gissa/Documents/Nancy/ResOSc')
 import pickle
