@@ -210,6 +210,133 @@ Since $d_{\max} \propto 1/\sqrt{S_h}$, these entries move the forecasts
 multiplicatively; all relative (coupled vs.\ uncoupled) statements are
 unaffected.
 
+\subsection{The Physical Sensitivity Chain, Step by Step}
+\label{sec:chain}
+
+The pipeline of \texttt{ResOSc/physical.py} composes the following
+stages, in order.  Each stage is a strict compression of the previous
+one --- from a design (tens of numbers), to modal data (four lists), to
+noise curves, to a single sensitivity curve, to a single figure of
+merit.  The optimizer acts only at Stage~1 and reads only Stage~8.
+
+\begin{enumerate}[noitemsep]
+  \item \textbf{Hardware.}  $N$ levitated discs with masses $m_i$, trap
+        stiffnesses $k_{\mathrm{trap},i}$, damping linewidths $\gamma_i$
+        (Hz, residual-gas collisions), and optional charges $q_i$
+        producing Coulomb coupling springs
+        $k_{ij} \propto q_i q_j / d_{ij}^3$ between \emph{every} pair
+        (long-range tails included).  Masses, traps, and charges are the
+        design variables; charges are bounded by the controllable range
+        and the stray-charge floor.
+  \item \textbf{Modal decomposition.}  The equations of motion
+        $M\ddot{\mathbf{x}} + K\mathbf{x} = \mathbf{F}(t)$, with $K$
+        assembled from traps and couplings in the graph-Laplacian
+        pattern, decouple through the generalized eigenproblem
+        $K\mathbf{v} = \omega^2 M \mathbf{v}$ into $N$ independent
+        damped oscillators: frequencies $f_n$, unit-norm shapes
+        $\mathbf{v}_n$, modal masses $\mu_n = \mathbf{v}_n^T M
+        \mathbf{v}_n$, and modal linewidths $\Gamma_n$ (mass-weighted
+        averages of the $\gamma_i$).  Each mode responds through the
+        Lorentzian susceptibility
+        \begin{equation}
+          \chi_n(f) = \frac{1}{\mu_n\!\left[(2\pi f_n)^2 - (2\pi f)^2
+            + i\,(2\pi f)(2\pi\Gamma_n)\right]}
+          \quad [\mathrm{m/N}],
+        \end{equation}
+        with resonant gain $Q_n = f_n/\Gamma_n \sim 10^5$ at LSD
+        parameters --- the bandwidth-for-gain trade that lets a
+        table-top device sense strain.  The design variables enter the
+        chain \emph{only} here, through $\{f_n, \mathbf{v}_n, \mu_n,
+        \Gamma_n\}$.
+  \item \textbf{Signal coupling.}  A GW strain $h(t)$ displaces each
+        trap equilibrium by $hL$ ($L$ = baseline), equivalent to a force
+        $F_i = \beta_i h$ with $\beta_i = k_{\mathrm{trap},i} L$; the
+        modal drive is the overlap $B_n = \mathbf{v}_n^T
+        \boldsymbol{\beta}$.  Because $\beta$ contains
+        $k_{\mathrm{trap}}$, retuning traps changes both \emph{where}
+        the modes sit and \emph{how loudly} each hears the wave.
+  \item \textbf{Observable.}  The detection statistic is one scalar,
+        $O(t) = \sum_i w_i x_i(t)$, with modal projections
+        $N_n = (V^T\mathbf{w})_n$ and end-to-end transfer function
+        \begin{equation}
+          T(f) = \sum_n N_n B_n \chi_n(f) \quad [\mathrm{m/strain}]:
+        \end{equation}
+        the wave drives mode $n$ with strength $B_n$, the mode amplifies
+        by $\chi_n$, the readout listens with gain $N_n$.  Readout~A
+        fixes $\mathbf{w} = \mathbf{g}/|\mathbf{g}|$ in hardware;
+        Readout~B leaves $\mathbf{w}$ free (Table~\ref{tab:readouts}).
+  \item \textbf{Noise budget.}  Two species with different anatomy.
+        \emph{Thermal} (FDT): the damping bath kicks each mode with
+        force PSD $S_{Q,n} = 4 k_B T \mu_n (2\pi\Gamma_n)$; being a
+        force, it is filtered by the \emph{same} $|\chi_n|^2$ as the
+        signal, so $S_O^{\mathrm{th}}(f) = \sum_n N_n^2 S_{Q,n}
+        |\chi_n(f)|^2$ is resonantly peaked.  \emph{Readout} (shot
+        noise): photon-counting imprecision added \emph{after} the
+        mechanics --- Readout~A carries phase shot noise
+        $S_\phi = \hbar\omega_L/(\eta_{\det} P_{\det})$ with the
+        cavity-pole shape $1 + (f/f_{\mathrm{cav}})^2$ (above the pole
+        the $\kappa$-dependence cancels); Readout~B carries flat
+        per-particle noise $S_i^{\mathrm{ro}}$, combining as
+        $\sum_i w_i^2 S_i^{\mathrm{ro}}$.
+  \item \textbf{Strain-referred sensitivity.}  Referring total noise to
+        the input,
+        \begin{equation}
+          S_h(f) = \frac{S_O^{\mathrm{th}}(f) + S_O^{\mathrm{ro}}(f)}
+                        {|T(f)|^2} \quad [\mathrm{Hz}^{-1}],
+        \end{equation}
+        whose square root is the sensitivity curve.  Near a resonance
+        the shared factor $|\chi_n|^2$ cancels between signal and
+        thermal noise: the thermal-limited floor is \emph{flat} across
+        each resonance and weight-independent.  Off resonance, flat
+        shot noise meets a collapsing $|T|^2$ and $S_h$ rises.  The
+        result is a comb of flat-bottomed buckets, one per mode, whose
+        usable width is set by the thermal/readout crossover --- the
+        physical successor of the dimensionless frequency-spread
+        objective.
+  \item \textbf{Source model.}  A planetary-mass PBH binary
+        ($\mathcal{M}_c = (m_1 m_2)^{3/5}/M_{\mathrm{tot}}^{1/5}$
+        between $10^{-4}$ and $10^{-2}\,M_\odot$) inspirals through the
+        band with $|\tilde h(f)|^2 = \mathcal{A}^2 f^{-7/3}$,
+        $\mathcal{A}^2 \propto (G\mathcal{M}_c/c^3)^{5/3} c^2/r^2$, up
+        to the innermost-stable-circular-orbit cutoff
+        $f_{\mathrm{ISCO}} = c^3/(6^{3/2}\pi G M_{\mathrm{tot}})$.
+        Because $f_{\mathrm{ISCO}}$ scales inversely with mass,
+        planetary-mass binaries are still inspiraling at
+        10--300\,kHz --- essentially the only known GW source in the
+        band where high-$Q$ levitated oscillators resonate.
+  \item \textbf{Matched-filter SNR and horizon distance.}  With the
+        waveform known, the optimal statistic accumulates
+        signal-to-noise across the band,
+        \begin{equation}
+          \rho^2 = 4\int_{f_{\mathrm{lo}}}^{f_{\mathrm{hi}}}
+            \frac{|\tilde h(f)|^2}{S_h(f)}\, df,
+        \end{equation}
+        so every bucket under the $f^{-7/3}$ envelope contributes ---
+        low-frequency buckets more per Hz.  (Numerically the
+        $\sim$Hz-wide buckets in a $\sim$100-kHz band require the
+        resonance-resolving grid of
+        \texttt{PhysicalArray.band\_grid}, $\pm 30\Gamma_n$ windows on
+        a log backbone.)  Since $\rho \propto 1/r$, one evaluation at a
+        reference distance gives the \emph{horizon distance}
+        $d_{\max} = r_{\mathrm{ref}}\,\rho(r_{\mathrm{ref}})/8$: the
+        radius within which the source is detectable at the
+        conventional threshold $\rho = 8$.  Detection rate scales as
+        the surveyed volume, $\propto d_{\max}^3$, making $d_{\max}$
+        the natural objective.  The dark-matter channel reuses the same
+        machinery with a frequency-flat impulse template
+        (\texttt{min\_impulse}, minimum detectable momentum kick).
+\end{enumerate}
+
+\noindent In compressed form,
+\begin{equation*}
+  \{m_i, k_{\mathrm{trap},i}, q_i, (w_i)\}
+  \;\longrightarrow\; \{f_n, \mathbf{v}_n, \mu_n, \Gamma_n\}
+  \;\longrightarrow\; T(f),\, S_O^{\mathrm{th}},\, S_O^{\mathrm{ro}}
+  \;\longrightarrow\; S_h(f)
+  \;\longrightarrow\; \rho
+  \;\longrightarrow\; d_{\max}.
+\end{equation*}
+
 % ================================================================== %
 \section{System Physics}
 % ================================================================== %
