@@ -1,0 +1,48 @@
+=== Readout A ===
+naive as-built (uniform traps, stray-floor charges):
+  d_max = 10733.970 AU
+uncoupled-opt: 3 seeds x 30000 steps (first seed incumbent-started)
+  seed 42 (incumbent): best 10733.970 AU (step 0, acc 0.60)
+  seed 43 (   random): best 10733.970 AU (step 25497, acc 0.60)
+  seed 44 (   random): best 10733.970 AU (step 25514, acc 0.60)
+  => best of seeds: 10733.970 AU
+coupled-opt: 3 seeds x 30000 steps (first seed incumbent-started)
+  seed 42 (incumbent): best 10733.970 AU (step 0, acc 0.61)
+  seed 43 (   random): best 10672.748 AU (step 29032, acc 0.61)
+  seed 44 (   random): best 10723.529 AU (step 23734, acc 0.59)
+  => best of seeds: 10733.970 AU
+=== Readout B ===
+naive as-built (uniform traps, stray-floor charges):
+  d_max = 57.704 AU
+uncoupled-opt: 3 seeds x 30000 steps (first seed incumbent-started)
+  seed 42 (incumbent): best 57.704 AU (step 0, acc 0.33)
+  seed 43 (   random): best 43.382 AU (step 27477, acc 0.31)
+  seed 44 (   random): best 40.951 AU (step 22579, acc 0.33)
+  => best of seeds: 57.704 AU
+coupled-opt: 3 seeds x 30000 steps (first seed incumbent-started)
+  seed 42 (incumbent): best 57.704 AU (step 0, acc 0.33)
+  seed 43 (   random): best 50.464 AU (step 24583, acc 0.36)
+  seed 44 (   random): best 47.539 AU (step 15571, acc 0.33)
+  => best of seeds: 57.704 AU
+saved results-mc/physopt_v3.pkl  (743 s)
+
+case              readout A [AU]  readout B [AU]
+uncoupled-opt          10733.970          57.704
+naive                  10733.970          57.704
+coupled-opt            10733.970          57.704
+readout A: coupled-opt / naive = 1.000, coupled-opt / uncoupled-opt = 1.000
+readout B: coupled-opt / naive = 1.000, coupled-opt / uncoupled-opt = 1.000
+figures: results-mc/physopt_v3_traces.pdf/.png, results-mc/physopt_v3_curves.pdf/.png
+
+readout A coupled-opt best design:
+  f_trap [kHz]: [100. 100. 100. 100. 100. 100. 100. 100. 100. 100.]
+  q [e]       : [1.00e+03 1.00e+03 1.00e+03 1.00e+03 1.00e+03 1.00e+03 1.00e+03 1.00e+03
+ 1.00e+03 1.00e+03]
+  mode f_n [kHz]: [100. 100. 100. 100. 100. 100. 100. 100. 100. 100.]
+
+readout B coupled-opt best design:
+  f_trap [kHz]: [100. 100. 100. 100. 100. 100. 100. 100. 100. 100.]
+  q [e]       : [1.00e+03 1.00e+03 1.00e+03 1.00e+03 1.00e+03 1.00e+03 1.00e+03 1.00e+03
+ 1.00e+03 1.00e+03]
+  mode f_n [kHz]: [100. 100. 100. 100. 100. 100. 100. 100. 100. 100.]
+  w           : [0.32 0.32 0.32 0.32 0.32 0.32 0.32 0.32 0.32 0.32]

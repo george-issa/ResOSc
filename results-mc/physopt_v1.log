@@ -1,0 +1,48 @@
+=== Readout A ===
+naive as-built (uniform traps, stray-floor charges):
+  d_max = 10733.959 AU
+uncoupled-opt: 3 seeds x 20000 steps
+  seed 42: best 10057.527 AU (step 19495, acc 0.85)
+  seed 43: best 10158.506 AU (step 19972, acc 0.86)
+  seed 44: best 10080.932 AU (step 18875, acc 0.86)
+  => best of seeds: 10158.506 AU
+coupled-opt: 3 seeds x 20000 steps
+  seed 42: best 10082.092 AU (step 19752, acc 0.85)
+  seed 43: best 10266.880 AU (step 16648, acc 0.84)
+  seed 44: best 10034.824 AU (step 17690, acc 0.86)
+  => best of seeds: 10266.880 AU
+=== Readout B ===
+naive as-built (uniform traps, stray-floor charges):
+  d_max = 67.860 AU
+uncoupled-opt: 3 seeds x 20000 steps
+  seed 42: best 42.967 AU (step 19921, acc 0.67)
+  seed 43: best 42.756 AU (step 17680, acc 0.63)
+  seed 44: best 43.028 AU (step 17310, acc 0.63)
+  => best of seeds: 43.028 AU
+coupled-opt: 3 seeds x 20000 steps
+  seed 42: best 42.992 AU (step 18662, acc 0.59)
+  seed 43: best 53.146 AU (step 14215, acc 0.56)
+  seed 44: best 44.485 AU (step 13090, acc 0.60)
+  => best of seeds: 53.146 AU
+saved results-mc/physopt_v1.pkl  (327 s)
+
+case              readout A [AU]  readout B [AU]
+uncoupled-opt          10158.506          43.028
+naive                  10733.959          67.860
+coupled-opt            10266.880          53.146
+readout A: coupled-opt / naive = 0.956, coupled-opt / uncoupled-opt = 1.011
+readout B: coupled-opt / naive = 0.783, coupled-opt / uncoupled-opt = 1.235
+figures: results-mc/physopt_v1_traces.pdf/.png, results-mc/physopt_v1_curves.pdf/.png
+
+readout A coupled-opt best design:
+  f_trap [kHz]: [ 22.3  43.6  58.   94.8  95.6  96.4 100.  100.  100.  100. ]
+  q [e]       : [7.31e+07 3.66e+07 7.06e+07 6.13e+07 1.71e+07 8.72e+07 4.48e+07 8.49e+07
+ 3.27e+07 9.10e+07]
+  mode f_n [kHz]: [ 83.2 107.3 141.  165.  174.9 220.7 221.9 246.  270.7 282.9]
+
+readout B coupled-opt best design:
+  f_trap [kHz]: [10.  12.1 13.6 19.6 27.2 29.4 43.  68.6 71.9 84.3]
+  q [e]       : [3.06e+07 1.00e+08 4.47e+06 1.00e+08 6.29e+07 1.00e+08 8.92e+07 5.06e+07
+ 4.34e+07 2.27e+05]
+  mode f_n [kHz]: [ 30.5  46.2  79.5  97.4 128.7 191.2 208.  255.8 320.1 386.8]
+  w           : [-0.22 -0.32 -0.25 -0.32 -0.3  -0.37 -0.11 -0.37 -0.52  0.16]
