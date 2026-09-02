@@ -38,16 +38,25 @@ F_TRAP_BOUNDS_HZ = (1.0e4, 1.0e5)      # published LSD trap range 10-100 kHz
 BAND_HZ = (1.0e4, 3.0e5)               # science band of the search
 MC_BENCH_SOLAR = 1.0e-3                # benchmark PBH chirp mass [M_sun]
 
+# Feedback-cooling effective Q per disc (cold damping: sets the mechanical
+# linewidth f/Q_eff without adding force noise).  Idealized-noiseless model;
+# range TBC — AG13 quotes tunability down to ~1e3, bare Q is ~1e13.  The
+# upper bound is set generously to expose the thermal-floor saturation.
+Q_EFF_BOUNDS = (1.0e3, 1.0e8)
+
 
 # --------------------------------------------------------------------------- #
 # Design -> array -> figure of merit
 # --------------------------------------------------------------------------- #
 
-def build_array(f_traps_hz, charges_e=None, benchmark=LSD_BENCHMARK):
-    """PhysicalArray for given trap frequencies and (optional) charges.
+def build_array(f_traps_hz, charges_e=None, benchmark=LSD_BENCHMARK,
+                qeff=None):
+    """PhysicalArray for given trap frequencies, (optional) charges, and
+    (optional) per-disc feedback Q_eff.
 
     charges_e = None -> exactly uncoupled (the theoretical null hypothesis;
     an as-built array sits at the stray-charge floor instead).
+    qeff = None -> uniform benchmark Q_eff.
     """
     b = benchmark
     f_traps_hz = np.asarray(f_traps_hz, dtype=float)
@@ -58,9 +67,11 @@ def build_array(f_traps_hz, charges_e=None, benchmark=LSD_BENCHMARK):
         kc = np.zeros(max(n - 1, 0))
     else:
         kc = coulomb_coupling_matrix(charges_e, b['spacing_m'])
-    # anchored damping split: cold-damped linewidth f/Q_eff (tunable, not
-    # sensitivity-critical) vs FDT force damping (gas + recoil, f-dependent)
-    return PhysicalArray(m, k, kc, f_traps_hz / b['Q_eff'], b['T_kelvin'],
+    q_eff = (np.full(n, b['Q_eff']) if qeff is None
+             else np.asarray(qeff, dtype=float))
+    # anchored damping split: cold-damped linewidth f/Q_eff (tunable, no
+    # force noise) vs FDT force damping (gas + recoil, f-dependent)
+    return PhysicalArray(m, k, kc, f_traps_hz / q_eff, b['T_kelvin'],
                          b['L_m'],
                          gamma_force_hz=lsd_gamma_force_hz(f_traps_hz, b))
 
@@ -86,14 +97,14 @@ def readout_setup(n, readout, benchmark=LSD_BENCHMARK):
 
 def evaluate_design(f_traps_hz, charges_e, w_vec, readout,
                     Mc_solar=MC_BENCH_SOLAR, band=BAND_HZ,
-                    benchmark=LSD_BENCHMARK):
+                    benchmark=LSD_BENCHMARK, qeff=None):
     """Horizon distance [m] of one design under one readout.
 
     w_vec is ignored for Readout A (hardware-fixed weights).  For Readout B
     it must be a unit vector; S_h is scale-invariant in w, so only the
-    direction matters.
+    direction matters.  qeff: per-disc feedback Q_eff (None -> benchmark).
     """
-    arr = build_array(f_traps_hz, charges_e, benchmark)
+    arr = build_array(f_traps_hz, charges_e, benchmark, qeff=qeff)
     w_fixed, ro = readout_setup(arr.n, readout, benchmark)
     if readout == 'A':
         w, S_ro = w_fixed, ro
@@ -108,9 +119,10 @@ def evaluate_design(f_traps_hz, charges_e, w_vec, readout,
 # Metropolis walk
 # --------------------------------------------------------------------------- #
 
-def _propose(state, rng, step_f, step_q, step_w,
-             f_bounds=F_TRAP_BOUNDS_HZ, q_bounds=Q_BOUNDS_E):
-    """One proposal: log-space multiplicative steps on f_trap and q
+def _propose(state, rng, step_f, step_q, step_w, step_qe,
+             f_bounds=F_TRAP_BOUNDS_HZ, q_bounds=Q_BOUNDS_E,
+             qe_bounds=Q_EFF_BOUNDS):
+    """One proposal: log-space multiplicative steps on f_trap, q, and Q_eff
     (clamped to bounds), tangent Gaussian + renormalize on w."""
     new = {}
     f = state['f_traps']
@@ -122,6 +134,9 @@ def _propose(state, rng, step_f, step_q, step_w,
                            *q_bounds)
     else:
         new['q'] = None
+    qe = state['qeff']
+    new['qeff'] = np.clip(qe * np.exp(rng.normal(0.0, step_qe, qe.shape)),
+                          *qe_bounds)
     if state.get('w') is not None:
         w = state['w'] + rng.normal(0.0, step_w, state['w'].shape)
         nrm = np.linalg.norm(w)
@@ -144,6 +159,7 @@ def metropolis_physical(
     step_f=0.05,
     step_q=0.30,
     step_w=0.15,
+    step_qe=0.30,
     T_start=1.0,
     T_end=0.01,
     seed=42,
@@ -174,15 +190,19 @@ def metropolis_physical(
             'q': (np.exp(rng.uniform(np.log(q_bounds[0]),
                                      np.log(q_bounds[1]), n))
                   if coupled else None),
+            'qeff': np.exp(rng.uniform(np.log(Q_EFF_BOUNDS[0]),
+                                       np.log(Q_EFF_BOUNDS[1]), n)),
             'w': None,
         }
         if readout == 'B':
             w0 = rng.standard_normal(n)
             state['w'] = w0 / np.linalg.norm(w0)
+    if state.get('qeff') is None:
+        state['qeff'] = np.full(n, benchmark['Q_eff'])
 
     def dmax_of(s):
         return evaluate_design(s['f_traps'], s['q'], s['w'], readout,
-                               Mc_solar, band, benchmark)
+                               Mc_solar, band, benchmark, qeff=s['qeff'])
 
     d_cur = dmax_of(state)
     E_cur = -np.log(d_cur)
@@ -196,7 +216,8 @@ def metropolis_physical(
     traj = np.empty(n_steps)
 
     for i in range(n_steps):
-        prop = _propose(state, rng, step_f, step_q, step_w, f_bounds, q_bounds)
+        prop = _propose(state, rng, step_f, step_q, step_w, step_qe,
+                        f_bounds, q_bounds)
         d_new = dmax_of(prop)
         E_new = -np.log(d_new)
         dE = E_new - E_cur
@@ -224,9 +245,10 @@ def metropolis_physical(
         'dmax_traj': traj,
         'acceptance_rate': n_accept / n_steps,
         'config': dict(n_steps=n_steps, Mc_solar=Mc_solar, band=band,
-                       f_bounds=f_bounds, q_bounds=q_bounds, step_f=step_f,
-                       step_q=step_q, step_w=step_w, T_start=T_start,
-                       T_end=T_end, seed=seed),
+                       f_bounds=f_bounds, q_bounds=q_bounds,
+                       qe_bounds=Q_EFF_BOUNDS, step_f=step_f,
+                       step_q=step_q, step_w=step_w, step_qe=step_qe,
+                       T_start=T_start, T_end=T_end, seed=seed),
     }
     if verbose:
         print(f"  best d_max = {best['dmax']/1.496e11:.3f} AU "
@@ -246,9 +268,11 @@ def naive_as_built(n=10, readout='B', benchmark=LSD_BENCHMARK,
     weights for Readout B.  Single evaluation, no optimization."""
     f_traps = np.full(n, benchmark['f_trap_hz'])
     q = np.full(n, q_stray_e)
+    qeff = np.full(n, benchmark['Q_eff'])
     w = np.full(n, 1.0 / np.sqrt(n))
-    d = evaluate_design(f_traps, q, w, readout, Mc_solar, band, benchmark)
+    d = evaluate_design(f_traps, q, w, readout, Mc_solar, band, benchmark,
+                        qeff=qeff)
     return {'method': 'naive-as-built', 'readout': readout, 'n': n,
-            'best': {'state': {'f_traps': f_traps, 'q': q,
+            'best': {'state': {'f_traps': f_traps, 'q': q, 'qeff': qeff,
                                'w': (w if readout == 'B' else None)},
                      'dmax': d, 'step': 0}}

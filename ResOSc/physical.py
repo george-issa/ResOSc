@@ -311,7 +311,8 @@ LSD_BENCHMARK = {
     'eps_minus_1': 1.1,          # Re(eps)-1 of the (mostly silica) stack
     'P_det_W': 2e-4,             # detection power (AG13 disc value)
     'lam_ro_m': 532e-9,          # readout B probe (companion note; still TBC)
-    'NA': 0.1,                   # readout B (companion note; still TBC)
+    'NA': 0.5,                   # imaging aperture; "up to 0.5" per Nancy
+                                 # (2026-08-31, via user; was 0.1 placeholder)
     'P_sc_W': 1e-6,              # readout B collected power (still TBC)
     'eta_det': 0.8,              # quantum efficiency (still TBC)
     'spacing_m': 15.5e-6,        # inter-particle spacing (companion note)

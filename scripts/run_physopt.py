@@ -39,8 +39,8 @@ N = 10
 N_STEPS = 100000
 SEEDS = (42, 43, 44)          # seed 42 chain starts from the incumbent
 T_START, T_END = 0.2, 0.002   # v2: colder — v1 (1.0, 0.01) wandered 90% of walk
-OUT = 'results-mc/physopt_v5'  # v5 = anchored model (AG13 drive, split
-                               # damping, anchored readout A), 1e5 steps
+OUT = 'results-mc/physopt_v6'  # v6 = v5 + NA=0.5 (per Nancy) + per-disc
+                               # tunable Q_eff as a design variable
 
 LABELS = {'naive': 'corner system', 'uncoupled-opt': 'uncoupled opt',
           'coupled-opt': 'coupled opt'}
@@ -53,6 +53,7 @@ def incumbent_state(readout, coupled):
     return {
         'f_traps': np.full(N, LSD_BENCHMARK['f_trap_hz']),
         'q': np.full(N, Q_STRAY_E) if coupled else None,
+        'qeff': np.full(N, LSD_BENCHMARK['Q_eff']),
         'w': (np.full(N, 1.0 / np.sqrt(N)) if readout == 'B' else None),
     }
 
@@ -140,7 +141,7 @@ plt.close(fig)
 
 def sh_curve(state, readout):
     q = state.get('q')
-    arr = build_array(state['f_traps'], q)
+    arr = build_array(state['f_traps'], q, qeff=state.get('qeff'))
     w_fixed, ro_noise = readout_setup(arr.n, readout)
     if readout == 'A':
         w = w_fixed
@@ -152,15 +153,19 @@ def sh_curve(state, readout):
         w = w / np.linalg.norm(w)
         f = arr.band_grid(*BAND_HZ)
         S_ro = readout_B_observable_noise(w, ro_noise)
-    return f, np.sqrt(arr.S_h(f, w, S_ro))
+    sh_thermal = np.sqrt(arr.S_h(f, w, 0.0))     # thermal-only floor
+    return f, np.sqrt(arr.S_h(f, w, S_ro)), sh_thermal
 
 fig, axes = plt.subplots(1, 2, figsize=(11, 4.2), sharey=False)
 for ax, ro in zip(axes, ('A', 'B')):
     for tag, color, lw in (('naive', 'k', 0.8),
                            ('uncoupled-opt', 'tab:blue', 0.9),
                            ('coupled-opt', 'tab:red', 0.9)):
-        f, sh = sh_curve(results[ro][tag]['best']['state'], ro)
+        f, sh, sh_th = sh_curve(results[ro][tag]['best']['state'], ro)
         ax.plot(f * 1e-3, sh, color=color, lw=lw, label=LABELS[tag])
+        if tag == 'coupled-opt':
+            ax.plot(f * 1e-3, sh_th, color='tab:gray', lw=0.8, ls=':',
+                    label='thermal floor (coupled opt)')
     ax.axhspan(1e-22, 1e-21, color='tab:green', alpha=0.15,
                label='LSD target')
     ax.set_xscale('log')
@@ -188,5 +193,7 @@ for ro in ('A', 'B'):
     print('  q [e]       :', np.array2string(st['q'], precision=2,
                                              formatter={'float_kind': lambda x: f'{x:.2e}'}))
     print('  mode f_n [kHz]:', np.array2string(arr.f_n * 1e-3, precision=1))
+    print('  Q_eff       :', np.array2string(st['qeff'], precision=2,
+                                             formatter={'float_kind': lambda x: f'{x:.2e}'}))
     if st.get('w') is not None:
         print('  w           :', np.array2string(st['w'], precision=2))
