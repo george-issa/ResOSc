@@ -37,7 +37,7 @@ conda env create -f environment.yml   # creates `resosc` with the package instal
 conda activate resosc
 ```
 
-Or, in an existing environment with Python ≥ 3.7: `pip install -e .`
+Or, in an existing environment with Python ≥ 3.9: `pip install -e .`
 (dependencies: NumPy, SciPy, Matplotlib).
 
 ## Quick start

@@ -7,10 +7,10 @@ name = "ResOSc"
 version = "0.1.0"
 description = "Resonant Oscillator Simulator for Coupled Systems"
 readme = "README.md"
-requires-python = ">=3.7"
+requires-python = ">=3.9"
 authors = [{ name = "George Issa" }]
 dependencies = [
-    "numpy>=1.21",
+    "numpy>=2.0",
     "scipy>=1.7",
     "matplotlib>=3.5",
 ]
