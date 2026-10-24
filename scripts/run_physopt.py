@@ -39,8 +39,8 @@ N = 10
 N_STEPS = 100000
 SEEDS = (42, 43, 44)          # seed 42 chain starts from the incumbent
 T_START, T_END = 0.2, 0.002   # v2: colder — v1 (1.0, 0.01) wandered 90% of walk
-OUT = 'results-mc/physopt_v6'  # v6 = v5 + NA=0.5 (per Nancy) + per-disc
-                               # tunable Q_eff as a design variable
+OUT = 'results-mc/physopt_v7'  # v7 = v6 + corrected readout-A shot noise
+                               # (AG13 impedance-matched form); B unchanged
 
 LABELS = {'naive': 'corner system', 'uncoupled-opt': 'uncoupled opt',
           'coupled-opt': 'coupled opt'}

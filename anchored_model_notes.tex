@@ -6,8 +6,8 @@
 \usepackage{graphicx}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue]{hyperref}
 
-\title{Anchored Physical Model of the Coupled Levitated-Sensor Array:\\
-Equations, Optimization Results, and Open Parameters}
+\title{Physical Model of the Coupled Levitated-Sensor Array:\\
+Equations and Optimization Results}
 \author{George Issa}
 \date{August 31, 2026}
 
@@ -22,18 +22,19 @@ This note documents the physical (SI) sensitivity pipeline of
 [PRL \textbf{128}, 111101 (2022), Table~I] and to the levitated-sensor
 proposal of Arvanitaki \& Geraci [PRL \textbf{110}, 071105 (2013),
 ``AG13'']. Every equation used in the pipeline is stated with all terms
-defined (Sec.~\ref{sec:chain}); parameter provenance is tabulated
+defined (Sec.~\ref{sec:chain}); parameters are tabulated
 (Sec.~\ref{sec:anchor}); the Metropolis optimization and the three-way
 comparison results are summarized (Secs.~\ref{sec:opt}--\ref{sec:results}).
-Headline: with the anchored model, the cavity readout (A) is
-thermal-noise-limited and the optimal array is the uniform stack at the
-top of the trap range (three-way tie, $d_{\max} = 5.5$~pc at
-$\Mc = 10^{-3} M_\odot$); the imaging readout (B) is shot-noise-limited
-and there \emph{Coulomb coupling wins}: the optimized coupled array
-reaches $2.2\times$ the best uncoupled array and $12\times$ the as-built
-baseline, with its deepest sensitivity buckets on the thermal floor
+The main result can be described as follows:
+the cavity readout (A) is
+thermal-noise-limited, and its optimal array is the uniform stack with
+maximum trap (three-way tie, $d_{\max} = 7.8$~pc at
+$\Mc = 10^{-3} M_\odot$). However, the imaging readout (B) is shot-noise-limited.
+There, \emph{Coulomb coupling wins}: the optimized coupled array
+reaches $2.2\times$ the best uncoupled array and $12\times$
+readout B's own as-built baseline, with its deepest sensitivity buckets on the thermal floor
 inside the LSD target band. Absolute forecasts currently hinge on a
-small set of unconfirmed parameters and conventions collected as direct
+small set of unconfirmed parameters and conventions collected as
 questions in Sec.~\ref{sec:questions}.
 \end{abstract}
 
@@ -106,17 +107,19 @@ cavity, drives disc $i$ with the inertial force [AG13 Eq.~(5)]
 \end{equation}
 where $f_{\mathrm{gw}}$ is the \emph{wave's} frequency, $L$ the
 \emph{full} cavity length, and $x_i \ll L$ (discs near the input
-mirror). Physically: the trap minima are locked to the intracavity
-interference pattern, which breathes with the wave by $\frac12 hL$; the
+mirror). Physically: the trap minima are locked to the intracavity's
+interference pattern, which breathes with the wave by $\frac12 hL$. The
 disc's inertia resists, giving a force $=$ mass $\times$ reference
 acceleration. Equation~\eqref{eq:drive} is exact at all frequencies and
-gives free-mass (flat, LIGO-like) displacement response $\frac12 hL$
-above resonance. The companion note's Eq.~(20), $\beta_i =
+gives a free mass displacement response $\frac12 hL$
+above resonance, much like the flat response seen in LIGO detectors. 
+The companion note's Eq.~(20), $\beta_i =
 k_{\mathrm{trap},i}L$, is the quasi-static ($f_{\mathrm{gw}}\!\to\!$
-resonance) limit \emph{with $L$ the half-baseline}; the two conventions
-differ by a factor 2 in $L$ (Question~\ref{q:drive}).
+resonance) limit \emph{with $L$ the half-baseline}. It seems that
+two conventions differ by a factor 2 in $L$ (Question~\ref{q:drive}).
 
-The modal drive and the strain-to-observable transfer function are
+The modal drive and the (strain to observable) transfer function
+are
 \begin{equation}
   B_n(f) = \tfrac{1}{2}(2\pi f)^2 L\,(\mathbf{v}_n^T\mathbf{m})
   \ \ [\mathrm{N/strain}], \qquad
@@ -131,13 +134,13 @@ vector $\mathbf{w}$ (the observable is the single time series $O(t) =
 \subsection{Thermal noise and the damping split}
 \label{sec:damping}
 
-Two distinct damping rates enter (this is the key correction from the
-anchoring):
+Two distinct damping rates enter the thermal noise 
+(one of the most recent changes):
 \begin{itemize}[noitemsep]
 \item \textbf{Force-noise damping} $\gamma^{\mathrm{f}}_i$: real
   bath friction, obeying the fluctuation--dissipation theorem (FDT). It
-  is the sum of residual-gas damping and the photon-recoil-heating
-  equivalent,
+  is expressed as the sum of 
+  residual gas damping and the equivalent of the photon recoil heating,
   \begin{equation}
     \gamma^{\mathrm{f}}_i = \gamma_g
       + \frac{\hbar\,(2\pi f_{\mathrm{trap},i})}{k_B T}\,
@@ -151,18 +154,18 @@ anchoring):
   $\hbar$ the reduced Planck constant, $\gamma_{\mathrm{sc},i}$ the
   photon-recoil rate ($0.05$~Hz at $f_{\mathrm{trap}} = 100$~kHz,
   scaling $\propto f_{\mathrm{trap}}$; PRL~128 Table~I), and
-  $(N_i\gamma_g)_{\rm pub} = 0.17$~Hz at 100~kHz is the
-  \emph{published product} of the mean phonon occupation $N_i = k_B
+  $(N_i\gamma_g)_{\rm pub} = 0.17$~Hz at 100~kHz is the published
+  \emph{product} of the mean phonon occupation $N_i = k_B
   T/\hbar\omega_0 \approx 6.3\times10^{7}$ and the gas damping.
   N.B.\ the published 0.17~Hz is \emph{not} the mechanical linewidth
   (Question~\ref{q:2pi}).
 \item \textbf{Mechanical linewidth} $\gamma_i = f_{\mathrm{trap},i} /
   Q_{\mathrm{eff},i}$: set by feedback cooling (cold damping), which
   adds damping \emph{without} force noise in the idealized limit.
-  $Q_{\mathrm{eff},i}$ is a per-disc control-loop setting (AG13 uses
-  $5.4\times10^5$; tunable).
+  $Q_{\mathrm{eff},i}$ is a control setting set for every disc (AG13 uses
+  $5.4\times10^5$ and claims it is tunable).
 \end{itemize}
-The one-sided modal thermal force PSD (power spectral density) and its
+The modal thermal force PSD (power spectral density) and its
 appearance at the observable are
 \begin{equation}
   S_{Q_n} = 4 k_B T\, \mu_n\, (2\pi\Gamma^{\mathrm{f}}_n)
@@ -173,13 +176,34 @@ appearance at the observable are
   \label{eq:fdt}
 \end{equation}
 Because thermal noise is a force, it is filtered by the same
-$|\chi_n|^2$ as the signal; on resonance the thermal-limited
-strain noise is therefore linewidth- and weight-independent.
+$|\chi_n|^2$ as the signal. On resonance, the thermal limited strain
+noise is therefore independent of both linewidth and weight. 
+When mode $n$
+dominates at $f = f_n$, Eqs.~\eqref{eq:transfer}, \eqref{eq:Sh} and
+\eqref{eq:fdt} give
+\begin{equation}
+  S_h\big|_{f_n} \;=\; \frac{S^{\mathrm{th}}_O}{|T|^2}
+  \;=\; \frac{N_n^2\, S_{Q_n}\, |\chi_n|^2}
+             {N_n^2\, B_n^2\, |\chi_n|^2}
+  \;=\; \frac{S_{Q_n}}{B_n^2(f_n)},
+  \label{eq:floorproof}
+\end{equation}
+where the weights cancel through $N_n^2$ (they multiply signal and
+thermal noise identically) and the susceptibility (with it the
+mechanical linewidth $\Gamma_n$, hence $Q_{\mathrm{eff}}$) cancels
+through $|\chi_n|^2$.
+What survives is force noise over drive; note $S_{Q_n} \propto
+\Gamma^{\mathrm{f}}_n$, the \emph{force-noise} damping, so the thermal
+floor depends on the bath, never on the feedback. 
+The intuitive picture that might be happening is that
+readout cannot distinguish a strain-driven wiggle from a
+thermally-driven one, since both are real motion through the same spring, 
+so no reweighting or amplification changes their ratio.
 
 \subsection{Readout (shot) noise}
 
 \textbf{Readout A (cavity probe; weights hardwired).} All discs
-dispersively shift one cavity mode with per-disc coupling
+dispersively shift one cavity mode with a coupling per disc:
 \begin{equation}
   G = k_c\,\frac{V_d}{4 V_c}\,(\epsilon - 1)\,\omega_c
   \ \ [\mathrm{rad\,s^{-1} m^{-1}}],
@@ -198,21 +222,36 @@ quantum efficiency, $P_{\det}$ = detected power) gives the
 displacement-equivalent readout noise
 \begin{equation}
   S^{\mathrm{ro}}_{O,A}(f) = \frac{S_\phi}{\sum_i G_i^2}
-  \left(\frac{\kappa}{2}\right)^{\!2}
-  \left[1 + \left(\frac{f}{f_{\mathrm{cav}}}\right)^{\!2}\right],
+  \left(\frac{\kappa}{4}\right)^{\!2}
+  \left[1 + \left(\frac{f}{f_{\mathrm{pole}}}\right)^{\!2}\right],
   \qquad
   \kappa = \frac{\pi c}{\mathcal{F} L},\quad
-  f_{\mathrm{cav}} = \frac{\kappa}{2\pi},
+  f_{\mathrm{pole}} = \frac{\kappa}{4\pi},
   \label{eq:roA}
 \end{equation}
-with $\kappa$ the cavity decay rate [rad/s] and $\mathcal{F}$ the
-cavity finesse. This matches AG13's $\sqrt{S_z} =
-\frac{\kappa}{4 k_c g}\sqrt{\hbar\omega_c/P_d}\,\sqrt{1+4\omega^2/\kappa^2}$
-up to factor-2 detection conventions (verified against their quoted
-$3.8\times10^{-16}\,\mathrm{m}/\sqrt{\mathrm{Hz}}$).
+with $\kappa$ the cavity \emph{energy} decay rate [rad/s] and
+$\mathcal{F}$ the cavity finesse. Equation~\eqref{eq:roA} \emph{is}
+AG13's impedance-matched reflection result, $\sqrt{S_z} =
+\frac{\kappa}{4 k_c g}\sqrt{\hbar\omega_c/P_d}\,
+\sqrt{1+4\omega^2/\kappa^2}$ (their shot-limited phase sensitivity
+$\delta\phi \approx 1/(2\sqrt{I})$, $I = P_d/\hbar\omega_c$), which we
+adopted the signal sidebands are filtered by the cavity
+\emph{field-amplitude} half-linewidth, so the pole sits at $\omega =
+\kappa/2$, i.e.\ $f_{\mathrm{pole}} = \kappa/4\pi$. (Earlier,
+we had used prefactor $\kappa/2$ and pole
+$\omega = \kappa$; the two agree far above the pole but the generic
+form is $4\times$ noisier in power below it). Now,
+disc parameters (100~m cavity, $\mathcal{F}=10$, $P_d = 0.2$~mW),
+Eq.~\eqref{eq:roA} evaluated at their 100~kHz operating point gives
+$4.0\times10^{-16}\,\mathrm{m}/\sqrt{\mathrm{Hz}}$ vs.\ their quoted
+$3.8\times10^{-16}$. For LSD ($L = 10$~m,
+$f_{\mathrm{pole}} = 0.75$~MHz) the whole 10--300~kHz band lies below
+the pole. Under the corrected (quieter) form, readout A's corner-system
+horizon rises $\approx\sqrt{2}$, from $1.14\times10^{6}$ to
+$1.61\times10^{6}$~AU ($7.8$~pc).
 
 \textbf{Readout B (per-disc imaging; weights free).} Each disc is
-imaged independently with per-disc position imprecision
+imaged independently and carries a position imprecision
 \begin{equation}
   S^{\mathrm{ro}}_i =
   \frac{\hbar\,\omega_{\mathrm{ro}}\,\lambda_{\mathrm{ro}}^2}
@@ -225,8 +264,9 @@ imaged independently with per-disc position imprecision
 where $\lambda_{\mathrm{ro}}$ ($\omega_{\mathrm{ro}} = 2\pi
 c/\lambda_{\mathrm{ro}}$) is the imaging wavelength, NA the collection
 numerical aperture, and $P^{\mathrm{sc}}_i$ the collected scattered
-power. The weights $\mathbf{w}$ are a free (unit-norm) post-processing
-choice; frequency-dependent weights $\mathbf{w}(f)$ are a strict further
+power. The weights $\mathbf{w}$ are a free (unit norm) post-processing
+choice. Therefore, weights that depend on frequency,
+$\mathbf{w}(f)$, are a strict further
 improvement not yet implemented.
 
 \subsection{Strain-referred noise, source, and figure of merit}
@@ -236,10 +276,11 @@ improvement not yet implemented.
                 {|T(f)|^2} \ \ [\mathrm{Hz^{-1}}]
   \label{eq:Sh}
 \end{equation}
-is the strain-referred noise PSD; $\sqrt{S_h}$ is the sensitivity
-curve. The source is an equal-mass primordial-black-hole binary of
+is the strain-referred noise PSD. Its square root, $\sqrt{S_h}$, 
+is the plotted sensitivity
+curve. The source is an equal mass primordial black hole binary of
 chirp mass $\Mc = (m_1 m_2)^{3/5}/(m_1+m_2)^{1/5}$ with the
-stationary-phase inspiral spectrum (Maggiore)
+stationary phase inspiral spectrum (Maggiore)
 \begin{equation}
   |\tilde h(f)|^2 = \mathcal{A}^2 f^{-7/3}, \qquad
   \mathcal{A}^2 = \frac{5}{24\,\pi^{4/3}} \frac{c^2}{r^2}
@@ -248,7 +289,7 @@ stationary-phase inspiral spectrum (Maggiore)
 \end{equation}
 with $r$ the source distance, $G$ Newton's constant, and $\Theta$ an
 $O(1)$ orientation factor (set to 1). The spectrum ends at the
-innermost-stable-circular-orbit frequency
+innermost stable circular orbit frequency
 $f_{\mathrm{ISCO}} = c^3/(6^{3/2}\pi G M_{\mathrm{tot}})$ with
 $M_{\mathrm{tot}} = 2^{6/5}\Mc$ for equal masses ($\approx 1.9$~MHz at
 $\Mc = 10^{-3}M_\odot$: the entire 10--300~kHz band is live). The
@@ -265,7 +306,7 @@ using $\rho \propto 1/r$. Band: 10--300~kHz; benchmark $\Mc =
 10^{-3}M_\odot$ ($\approx$ one Jupiter mass; middle of the PRL 133,
 111401 search range).
 
-\section{Parameter anchoring and validation}
+\section{Parameters and validation}
 \label{sec:anchor}
 
 \begin{table}[h]
@@ -316,18 +357,18 @@ $10^{-4}$ of brute force) all pass.
 
 Annealed Metropolis walk minimizing $E = -\log d_{\max}$: log-space
 multiplicative proposals on positive variables (clipped to bounds),
-tangent-space Gaussian on $\mathbf{w}$; geometric annealing $T: 0.2 \to
+tangent-space Gaussian on $\mathbf{w}$. Geommetric annealing $T: 0.2 \to
 0.002$ (in log-$d_{\max}$ units); $10^5$ steps per chain; three chains
-per case (one seeded at the as-built corner, two random);
-best-ever-visited state returned. Design variables and bounds:
+per case (one seeded at the corner, two random). The reported result is
+best ever visited state. Design variables and bounds:
 $f_{\mathrm{trap},i} \in [10,100]$ kHz; $q_i \in [10^3, 10^8]\,e$
 (coupled cases); $Q_{\mathrm{eff},i} \in [10^3, 10^8]$ (upper bound =
-engineering-plausibility placeholder, Q\ref{q:qeff}); $\mathbf{w}$ free
-for readout B only. Three-way comparison: (i) \emph{corner system} ---
-as-built baseline: uniform traps at 100~kHz, charges at the stray
+engineering constraint, Q\ref{q:qeff}); $\mathbf{w}$ free
+for readout B only. Three-way comparison: (i) \emph{corner system}
+baseline: uniform traps at 100~kHz, charges at the stray
 floor, $Q_{\mathrm{eff}} = 5.4\times10^5$, uniform weights; (ii)
-\emph{uncoupled opt} --- charges removed, everything else optimized
-(null hypothesis); (iii) \emph{coupled opt} --- everything optimized.
+\emph{uncoupled opt}: charges removed, everything else optimized; (iii) \emph{coupled opt}:
+everything optimized.
 
 \section{Results}
 \label{sec:results}
@@ -335,50 +376,52 @@ floor, $Q_{\mathrm{eff}} = 5.4\times10^5$, uniform weights; (ii)
 \begin{table}[h]
 \centering
 \caption{Three-way comparison, $d_{\max}$ at $\Mc = 10^{-3}M_\odot$
-[AU]. v5: NA = 0.1, $Q_{\mathrm{eff}}$ fixed at $5.4\times10^5$. v6:
-NA = 0.5, per-disc $Q_{\mathrm{eff}}$ optimized.}
+[AU]. v5: NA = 0.1, $Q_{\mathrm{eff}}$ fixed at $5.4\times10^5$. v7:
+NA = 0.5, per-disc $Q_{\mathrm{eff}}$ optimized, corrected readout-A
+shot-noise convention (readout B is identical to the earlier v6 run,
+which the correction does not touch).}
 \label{tab:results}
 \begin{tabular}{@{}lrrrr@{}}
 \toprule
  & \multicolumn{2}{c}{Readout A} & \multicolumn{2}{c}{Readout B} \\
-Case & v5 & v6 & v5 & v6 \\
+Case & v5 & v7 & v5 & v7 \\
 \midrule
-Corner system  & 1{,}138{,}752 & 1{,}138{,}752 &  83.9 &  419.7 \\
-Uncoupled opt  & 1{,}138{,}752 & 1{,}138{,}752 & 208.9 & 2{,}260.6 \\
-Coupled opt    & 1{,}138{,}752 & 1{,}138{,}752 & 380.9 & \textbf{4{,}904.9} \\
+Corner system  & 1{,}138{,}752 & 1{,}605{,}008 &  83.9 &  419.7 \\
+Uncoupled opt  & 1{,}138{,}752 & 1{,}605{,}008 & 208.9 & 2{,}260.6 \\
+Coupled opt    & 1{,}138{,}752 & 1{,}605{,}008 & 380.9 & \textbf{4{,}904.9} \\
 \midrule
 coupled/uncoupled & 1.000 & 1.000 & 1.82 & \textbf{2.17} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\textbf{Readout A (thermal-limited in its bucket):} exact three-way tie
-at $d_{\max} = 5.52$~pc. The optimum is the uniform 10-disc stack at
-the 100 kHz trap ceiling; its bucket bottom ($1.3\times10^{-22}$)
+\textbf{Readout A (thermal-limited in its bucket):} exact tie
+at $d_{\max} = 7.78$~pc. The optimum is the uniform 10 disc stack at
+the 100 kHz trap ceiling. Its bucket bottom ($1.3\times10^{-22}$)
 reaches the LSD target band. Coupling is provably harmless there (any
 coupling network exerts zero net force on the common mode of identical
-traps) and empirically unhelpful; $Q_{\mathrm{eff}}$ is a null
-direction (signal and thermal noise amplify identically).
+traps) and empirically unhelpful. $Q_{\mathrm{eff}}$ is a null
+direction because signal and thermal noise amplify identically.
 
 \textbf{Readout B (shot-limited):} the hierarchy is strict and
 converged (seed spread 3--6\%): corner $<$ uncoupled opt $<$ coupled
 opt. The v6 winner has traps in two clusters (20--32 and 74--100 kHz),
-charges $(0.3\text{--}1)\times10^8\,e$, modes spread 63--383 kHz ---
-several \emph{above} the trap ceiling, reachable only through coupling
-and fully driven under Eq.~\eqref{eq:drive} --- and every
+charges $(0.3\text{--}1)\times10^8\,e$, modes spread 63--383 kHz, with
+several of them \emph{above} the trap ceiling, reachable only through coupling
+and fully driven under Eq.~\eqref{eq:drive}. Every
 $Q_{\mathrm{eff}}$ pinned at $(0.6\text{--}1)\times10^8$: the deepest
 buckets sit \emph{on the thermal floor} inside the LSD target band
 (Fig.~\ref{fig:curves}). Because $Q_{\mathrm{eff}}$ pins at the search
 bound, readout B's absolute reach is \emph{bound-limited}: it scales
 directly with the practical $Q_{\mathrm{eff}}$ cap
 (Question~\ref{q:qeff}). The relative statements (coupled beats
-uncoupled $2.17\times$; both beat the as-built corner) are insensitive
+uncoupled $2.17\times$; both beat the corner) are insensitive
 to global factors.
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=\linewidth]{results-mc/physopt_v6_curves.pdf}
-\caption{Strain sensitivity of the three designs (v6). Left: readout A
+\includegraphics[width=\linewidth]{results-mc/physopt_v7_curves.pdf}
+\caption{Strain sensitivity of the three designs (v7). Left: readout A
 (tie; single bucket at 100 kHz on its thermal floor). Right: readout B
 --- the coupled optimum (red) tiles buckets across and beyond the trap
 range; its deepest dips touch the thermal floor (gray dotted) inside
@@ -386,36 +429,45 @@ the LSD target band (green).}
 \label{fig:curves}
 \end{figure}
 
-\section{Questions for Nancy}
+\section{Questions and notes I am not sure of}
 \label{sec:questions}
 
 \begin{enumerate}[label=\textbf{Q\arabic*.},ref=\arabic*,leftmargin=3em]
 \item \label{q:2pi} \textbf{Units of the damping table (factor
   $2\pi$).} In PRL 128 Table~I, are $N_i\gamma_g$ (0.17/1.7 Hz) and
   $\gamma_{\mathrm{sc}}$ (0.05/0.005 Hz) plain frequencies (cycles/s)
-  or angular rates (rad/s) labeled Hz? The FDT force noise needs the
-  angular rate; the answer moves every absolute $\sqrt{S_h}$ and
+  or angular rates (rad/s) labeled Hz? The FDT force noise depends on
+  the angular rate, so the answer moves every absolute $\sqrt{S_h}$ and
   $d_{\max}$ by $\sqrt{2\pi} \approx 2.5$ ($16\times$ in event rate).
-  Our residual factor $\sim4$ against the published $h_{\min}$ is
-  consistent with ``angular'' plus $O(1)$ bookkeeping.
+  I have tried to fit both, but I still can't figure it out:
+  The table's own
+  column headers are $\omega_0/2\pi = 10/100$~kHz, showing the
+  authors distinguish angular from cycle frequencies and suggesting the
+  damping rows have units Hz.
+  But feeding the table into the paper's own Eq.~(1) (whose $Q =
+  \omega_0/\gamma_g$ requires the \emph{angular} rate) reproduces the
+  published $h_{\min} = 1.02\times10^{-22}$ to within $1.6\times$ if
+  the tabulated values are read as angular rates, but only to within
+  $4.0\times$ if read as plain Hz. 
 \item \label{q:qeff} \textbf{Practical ceiling on $Q_{\mathrm{eff}}$.}
-  How high can the feedback-cooled $Q$ realistically go --- i.e.\ how
+  How high can the feedback cooling $Q$ realistically go? 
+  In other words, how
   weak can cold damping be while (a) the trap frequency stays stable to
   within a linewidth over the $\sim 1/\Gamma$ coherence time (laser
-  intensity noise), and (b) feedback measurement-noise injection
+  intensity noise), and (b) feedback measurement noise injection
   remains negligible? Our optimizer pins at the arbitrary search bound
-  $10^8$; readout B's forecast scales with the true cap.
+  $10^8$, and readout B scales with the true cap.
 \item \label{q:B} \textbf{Readout B (imaging) parameters.} Is NA = 0.5
   an operating point or an upper limit, and is it simultaneously
-  achievable for all ten discs? Per-disc collected power
+  achievable for all ten discs? Collected power per disc
   $P^{\mathrm{sc}}_i$ (we assume 1 $\mu$W), imaging wavelength (532
   nm?), and detector quantum efficiency $\eta$ (0.8?). These set the
-  shot plateau, Eq.~\eqref{eq:roB}, and hence all readout-B numbers.
+  shot plateau, Eq.~\eqref{eq:roB}, and hence all readout B numbers.
 \item \label{q:charge} \textbf{Charge range and stray floor.} What
   charge can be controllably placed on a disc (upper bound), and what
   is the residual/stray charge floor (lower bound)? These bound the
-  Coulomb design space, Eq.~\eqref{eq:coulomb}; the coupled optimum
-  currently uses $q \sim 10^8\,e$ --- is that feasible on a 75 $\mu$m
+  Coulomb design space, Eq.~\eqref{eq:coulomb}. The coupled optimum
+  currently uses $q \sim 10^8\,e$. Is this reasonable on a 75 $\mu$m
   stack?
 \item \label{q:gprofile} \textbf{Intracavity coupling profile $G_i$.}
   Are the ten discs' dispersive couplings equal (all at equivalent
@@ -425,28 +477,26 @@ the LSD target band (green).}
   fixed weights).
 \item \label{q:drive} \textbf{Drive convention.} The companion note's
   Eq.~(20) ($\beta_i = k_{\mathrm{trap},i}L$, from $\delta x = hL/2$)
-  vs.\ AG13's $F = \frac12 m\omega_{\mathrm{gw}}^2 \ell_m h$: we have
-  adopted AG13 (exact, full cavity length). Please confirm the intended
-  $L$ convention in the note (half- vs.\ full baseline) --- a factor 2
-  in amplitude, 4 in power.
+  vs.\ AG13's $F = \frac12 m\omega_{\mathrm{gw}}^2 \ell_m h$. 
+  The current pipeline uses AG13's (full cavity length). Is the $L$
+  convention in the notes full or half baseline (factor of $2$ in the force,
+  $4$ in power)?
 \item \label{q:temp} \textbf{FDT temperature.} We use the 300 K gas
   temperature in Eq.~\eqref{eq:fdt} with the gas $\gamma_g$ (feedback
-  treated as noiseless cold damping). Confirm this is the right
-  bookkeeping for the planned operating mode (vs.\ an effective
-  center-of-mass temperature).
+  treated as noiseless cold damping). Another option to choose could
+  be a temperature scaled by the center of mass. 
 \item \label{q:mass} \textbf{Disc mass.} Our geometric estimate
   $5.8\times10^{-10}$ kg (SiO$_2$ spacer 14.58 $\mu$m + two 110 nm Si
-  caps at $r = 75\,\mu$m) matches the PRL 128 bookkeeping ---
-  confirm.
+  caps at $r = 75\,\mu$m) matches PRL 128.
 \end{enumerate}
 
 \section*{Planned next steps}
-Frequency-dependent weights $\mathbf{w}(f)$ for readout B (strictly
-optimal post-processing; removes antiresonances); non-uniform $G_i$
-study (pending Q\ref{q:gprofile}); stray-charge/trap-disorder tolerance
-budget; detection-rate objective over the PBH mass function; and an
-axion-scan objective (monochromatic source at unknown frequency ---
-the science case where band coverage, and possibly coupling-spread
-arrays, are natively favored).
+Frequency-dependent weights $\mathbf{w}(f)$ for readout B 
+(optimal post-processing; removes antiresonances); non-uniform $G_i$
+study?; stray charge/trap disorder tolerance
+budget; detection rate objective over the PBH for a few masses?; an
+axion scan objective (monochromatic source at unknown frequency). Maybe
+this is where band coverage, and possibly coupling spread
+arrays, are natively favored.
 
 \end{document}

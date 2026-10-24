@@ -174,10 +174,14 @@ class PhysicalArray:
 # --------------------------------------------------------------------------- #
 
 def readout_A(g, lam_probe, P_det, eta_det, kappa):
-    """Cavity-probe readout (note Eqs. 30-35).
+    """Cavity-probe readout, AG13 impedance-matched reflection form
+    (PRL 110,071105): sqrt(S_z) = (kappa/4G) sqrt(hbar w_L/(eta P))
+    sqrt(1 + 4 w^2/kappa^2).
 
     g : (N,) optomechanical couplings d(omega_cav)/dx_i [rad s^-1 m^-1]
-    kappa : cavity decay rate [rad/s]; cavity pole f_cav = kappa/(2 pi).
+    kappa : cavity ENERGY decay rate [rad/s]; the signal sidebands are
+        filtered by the field-amplitude half-linewidth, so the pole sits
+        at omega = kappa/2, i.e. f_pole = kappa/(4 pi).
 
     Returns (w_fixed, S_O_ro(f) callable [m^2/Hz]).
     """
@@ -186,11 +190,11 @@ def readout_A(g, lam_probe, P_det, eta_det, kappa):
     w_fixed = g / np.sqrt(gnorm2)
     omega_L = 2.0 * np.pi * C / lam_probe
     S_phi = HBAR * omega_L / (eta_det * P_det)              # [rad^2/Hz]
-    f_cav = kappa / (2.0 * np.pi)
+    f_pole = kappa / (4.0 * np.pi)
 
     def S_O_ro(f):
         f = np.atleast_1d(np.asarray(f, dtype=float))
-        return (S_phi / gnorm2) * (kappa / 2.0)**2 * (1.0 + (f / f_cav)**2)
+        return (S_phi / gnorm2) * (kappa / 4.0)**2 * (1.0 + (f / f_pole)**2)
 
     return w_fixed, S_O_ro
 
