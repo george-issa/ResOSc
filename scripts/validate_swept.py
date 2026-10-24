@@ -18,13 +18,12 @@ _ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
 _sys.path.insert(0, _ROOT)
 _os.chdir(_ROOT)
 import sys
-sys.path.insert(0, '/Users/gissa/Documents/Nancy/ResOSc')
 import pickle
 import numpy as np
 from scipy.optimize import minimize
 
 PKL = sys.argv[1] if len(sys.argv) > 1 else \
-    '/Users/gissa/Documents/Nancy/ResOSc/results/mc/mc_results_v2.pkl'
+    'results/mc/mc_results_v2.pkl'
 with open(PKL, 'rb') as f:
     d = pickle.load(f)
 

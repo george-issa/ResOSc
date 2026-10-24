@@ -5,8 +5,6 @@ import os as _os, sys as _sys
 _ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
 _sys.path.insert(0, _ROOT)
 _os.chdir(_ROOT)
-import sys
-sys.path.insert(0, '/Users/gissa/Documents/Nancy/ResOSc')
 import pickle
 import numpy as np
 from scipy.optimize import minimize
@@ -37,7 +35,7 @@ plt.rcParams.update({
 })
 
 # ---- data -------------------------------------------------------------------
-with open('/Users/gissa/Documents/Nancy/ResOSc/results/route3/route3_sweep.pkl', 'rb') as f:
+with open('results/route3/route3_sweep.pkl', 'rb') as f:
     d = pickle.load(f)
 row = next(r for r in d['rows'] if r['floor'] == 0.02)
 x = row['params']
@@ -182,6 +180,6 @@ axF.set_ylabel(r'observable response $|O(\omega)|$')
 axF.set_title('Response of the optimal observable: every resonance beats the uncoupled bound',
               color=INK, loc='left')
 
-fig.savefig('/Users/gissa/Documents/Nancy/ResOSc/results/route3/best_config.pdf')
-fig.savefig('/Users/gissa/Documents/Nancy/ResOSc/results/route3/best_config.png', dpi=150)
+fig.savefig('results/route3/best_config.pdf')
+fig.savefig('results/route3/best_config.png', dpi=150)
 print('saved best_config.pdf/.png')

@@ -11,15 +11,12 @@ import os as _os, sys as _sys
 _ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
 _sys.path.insert(0, _ROOT)
 _os.chdir(_ROOT)
-import sys
-sys.path.insert(0, '/Users/gissa/Documents/Nancy/ResOSc')
 import os, pickle
 import numpy as np
 from scipy.optimize import minimize
 from ResOSc.montecarlo import (metropolis_optimize, _build_and_solve,
                                _box_optimal_uncoupled_scale)
 
-os.chdir('/Users/gissa/Documents/Nancy/ResOSc')
 
 FLOORS = [0.01, 0.02, 0.05, 0.1, 0.2, 0.5]
 RGAP   = 3.0

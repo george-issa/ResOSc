@@ -3,8 +3,6 @@ import os as _os, sys as _sys
 _ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
 _sys.path.insert(0, _ROOT)
 _os.chdir(_ROOT)
-import sys
-sys.path.insert(0, '/Users/gissa/Documents/Nancy/ResOSc')
 import pickle
 import numpy as np
 import matplotlib
@@ -27,7 +25,7 @@ plt.rcParams.update({
     'font.size': 10,
 })
 
-with open('/Users/gissa/Documents/Nancy/ResOSc/results/route3/route3_sweep.pkl', 'rb') as f:
+with open('results/route3/route3_sweep.pkl', 'rb') as f:
     d = pickle.load(f)
 rows = d['rows']
 floors = np.array([r['floor'] for r in rows])
@@ -59,6 +57,6 @@ ax.set_xlabel('coupling floor $k_\\mathrm{min}$ (all bonds $\\geq k_\\mathrm{min
 ax.set_ylabel('best $S\\,/\\,S_\\mathrm{unc}$')
 ax.legend(loc='upper right', frameon=False, fontsize=9, labelcolor=INK2)
 
-fig.savefig('/Users/gissa/Documents/Nancy/ResOSc/results/route3/min_couple_configs.pdf')
-fig.savefig('/Users/gissa/Documents/Nancy/ResOSc/results/route3/min_couple_configs.png', dpi=160)
+fig.savefig('results/route3/min_couple_configs.pdf')
+fig.savefig('results/route3/min_couple_configs.png', dpi=160)
 print('saved min_couple_configs.pdf/.png')
