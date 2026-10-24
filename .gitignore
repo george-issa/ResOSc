@@ -9,7 +9,9 @@ dist/
 # macOS
 .DS_Store
 
-# Figures (regenerate with the notebooks and scripts)
+# Kept local only: notebooks, compiled notes, figures
+notebooks/
+docs/*.pdf
 docs/figures/
 results/**/*.pdf
 results/**/*.png

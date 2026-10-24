@@ -17,16 +17,14 @@ Sensor Detector (LSD) parameters.
 ```
 ResOSc/          Python package
 scripts/         Optimization runs and figure scripts (outputs go to results/)
-notebooks/       Worked examples
-docs/            Notes (LaTeX + PDF), research logs, references
+docs/            Notes (LaTeX sources), research logs, references
 results/
   mc/            Dimensionless-model Monte Carlo and Metropolis runs
   route3/        Parasitic-coupling-floor sweep
   physical/      Physical (SI) model optimization and validation
 ```
 
-Figures are not tracked: the notebooks write them to `docs/figures/` and the
-scripts to `results/`.
+Figures, notebooks, and compiled PDFs are not tracked.
 
 ## Installation
 
@@ -132,9 +130,8 @@ chain of stages, each a strict compression of the previous one:
    channel reuses the same machinery with a flat impulse template
    (`min_impulse`).
 
-The full derivation is in `docs/anchored_model_notes.pdf`,
-`docs/ResOSc_notes_and_findings.pdf` (§ "The Physical Sensitivity Chain, Step by Step"),
-and the companion note `docs/noise_function_notes.pdf`.
+The full derivation is in `docs/anchored_model_notes.tex` and
+`docs/ResOSc_notes_and_findings.tex` (§ "The Physical Sensitivity Chain, Step by Step").
 
 ## Scripts
 
@@ -154,27 +151,14 @@ directory, e.g. `python scripts/run_mc.py --help`.
 
 | File | Contents |
 |---|---|
-| `docs/anchored_model_notes.pdf` | Physical model anchored to LSD / AG13: equations, parameters, optimization results |
-| `docs/ResOSc_notes_and_findings.pdf` | Full project notes: physics, optimization methods, results |
-| `docs/noise_function_notes.pdf` | Companion note: SNR of a multimode mechanical detector |
+| `docs/anchored_model_notes.tex` | Physical model anchored to LSD / AG13: equations, parameters, optimization results |
+| `docs/ResOSc_notes_and_findings.tex` | Full project notes: physics, optimization methods, results |
 | `docs/results.md` | Findings log for the dimensionless model |
 | `docs/monte_carlo.md` | Monte Carlo run log: settings, seeds, artifacts |
 | `docs/references.md` | Papers the physical model is anchored to |
 
-LaTeX sources sit next to their PDFs. To rebuild them, first regenerate the
-figures (run the notebooks and the `plot_*` scripts), then
-`cd docs && latexmk -pdf anchored_model_notes.tex`.
-
 Results computed before the 2026-08-20 eigenvector fix are superseded and kept
 as project history; see the note at the top of `docs/results.md`.
-
-## Notebooks
-
-| Notebook | Contents |
-|---|---|
-| `notebooks/01_basics.ipynb` | Normal modes, forced response, mode shapes, observables |
-| `notebooks/02_forces_and_observables.ipynb` | Force models (GW strain vs DM), generalized forces, frequency spread |
-| `notebooks/03_monte_carlo.ipynb` | Monte Carlo optimization of masses and springs |
 
 ## License
 

@@ -1,7 +1,7 @@
 """Physical (SI) sensitivity pipeline for a levitated-sensor array.
 
 Implements the framework of the companion note "SNR of a Multimode
-Mechanical Detector" (docs/noise_function_notes.pdf): modal decomposition of a
+Mechanical Detector": modal decomposition of a
 coupled array, thermal (FDT) + readout noise, strain-referred noise PSD
 S_h(f), matched-filter SNR for PBH inspirals (Maggiore's formula), horizon
 distance, and a minimum-detectable-impulse figure for dark-matter kicks.
