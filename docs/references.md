@@ -1,7 +1,7 @@
 # References
 
 Papers the physical model is anchored to. PDFs are not redistributed in this
-repository; keep local copies in `references/` (gitignored).
+repository.
 
 | Short name | Reference | Used for |
 |---|---|---|
