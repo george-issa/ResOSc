@@ -5,7 +5,7 @@ lab cannot switch parasitic couplings off).  Pipeline per floor:
   1. constrained Metropolis search (alpha=1, min gap 3 linewidths, step 0.2)
   2. floor-constrained polish of the winner (equalizer objective, 29 params)
   3. swept-metric evaluation of the polished design (conservative number)
-Results -> results-mc/route3_sweep.pkl
+Results -> results/route3/route3_sweep.pkl
 """
 import os as _os, sys as _sys
 _ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
@@ -122,7 +122,7 @@ for F in FLOORS:
     print(f'floor {F}: search={search_score:.4f}  polished iso={iso/BOX:.4f}  '
           f'swept={swept/BOX:.4f}  min_gap={gap:.2f} lw', flush=True)
 
-with open('results-mc/route3_sweep.pkl', 'wb') as f:
+with open('results/route3/route3_sweep.pkl', 'wb') as f:
     pickle.dump({'box_scale': BOX, 'rgap': RGAP, 'rows': rows}, f)
 
 print('\n===== ROUTE 3 SUMMARY =====')

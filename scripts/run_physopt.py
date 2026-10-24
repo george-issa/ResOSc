@@ -13,7 +13,7 @@ Objective: PBH horizon distance d_max at the benchmark chirp mass 1e-3 Msun
 over the 10-300 kHz band.  Absolute values inherit the TBC placeholder
 parameters (powers, g profile, charge bounds); relative statements do not.
 
-Outputs: results-mc/physopt_v1.pkl, physopt_v1_traces.(pdf|png),
+Outputs: results/physical/physopt_v1.pkl, physopt_v1_traces.(pdf|png),
 physopt_v1_curves.(pdf|png), physopt_v1.log (stdout tee'd by hand).
 """
 import os as _os, sys as _sys
@@ -39,7 +39,7 @@ N = 10
 N_STEPS = 100000
 SEEDS = (42, 43, 44)          # seed 42 chain starts from the incumbent
 T_START, T_END = 0.2, 0.002   # v2: colder — v1 (1.0, 0.01) wandered 90% of walk
-OUT = 'results-mc/physopt_v7'  # v7 = v6 + corrected readout-A shot noise
+OUT = 'results/physical/physopt_v7'  # v7 = v6 + corrected readout-A shot noise
                                # (AG13 impedance-matched form); B unchanged
 
 LABELS = {'naive': 'corner system', 'uncoupled-opt': 'uncoupled opt',

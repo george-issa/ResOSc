@@ -6,10 +6,10 @@ results from the cluster.
 Workflow
 --------
     # On the cluster:
-    python3 run_mc.py --save-results results-mc/mc_results.pkl
+    python3 run_mc.py --save-results results/mc/mc_results.pkl
 
     # Transfer to laptop:
-    scp user@cluster:~/ResOSc/results-mc/mc_results.pkl results-mc/
+    scp user@cluster:~/ResOSc/results/mc/mc_results.pkl results/mc/
 
     # On your laptop:
     python plot_mc.py
@@ -24,11 +24,11 @@ EXAMPLES
 
 -- Specify input file explicitly ----------------------------------------------
 
-    python plot_mc.py --input results-mc/mc_results.pkl
+    python plot_mc.py --input results/mc/mc_results.pkl
 
 -- Control output path --------------------------------------------------------
 
-    python plot_mc.py --savefig results-mc/mc_results.pdf
+    python plot_mc.py --savefig results/mc/mc_results.pdf
     python plot_mc.py --savefig figures/comparison.pdf
 
 -- Disable LaTeX (plain fonts) -----------------------------------------------
@@ -61,8 +61,8 @@ import os
 # CONFIG — edit these defaults
 # ============================================================================ #
 
-INPUT   = 'results-mc/mc_results.pkl'   # .pkl file produced by run_mc.py
-SAVEFIG = 'results-mc/mc_results.pdf'   # output PDF path
+INPUT   = 'results/mc/mc_results.pkl'   # .pkl file produced by run_mc.py
+SAVEFIG = 'results/mc/mc_results.pdf'   # output PDF path
 METHOD  = 'both'     # 'random', 'metropolis', or 'both'
 NO_SHOW = True       # set True to suppress the interactive window
 NO_LATEX = False     # set True to disable LaTeX rendering

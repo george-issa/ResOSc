@@ -69,8 +69,8 @@ EXAMPLES — copy any block into your terminal as-is
 -- Reproducibility & output ---------------------------------------------------
 
     python3 run_mc.py --seed 0                          # different RNG seed
-    python3 run_mc.py --savefig results-mc/out.pdf      # save plot to PDF
-    python3 run_mc.py --save-results results-mc/mc_results.pkl   # save for later plotting
+    python3 run_mc.py --savefig results/mc/out.pdf      # save plot to PDF
+    python3 run_mc.py --save-results results/mc/mc_results.pkl   # save for later plotting
 
 -- Environment flags ----------------------------------------------------------
 
@@ -80,13 +80,13 @@ EXAMPLES — copy any block into your terminal as-is
 -- Combined examples ----------------------------------------------------------
 
     # Large workstation run — save numerical results, no plotting
-    python3 run_mc.py --n 8 --samples 20000 --refine 300 --save-results results-mc/mc_results.pkl
+    python3 run_mc.py --n 8 --samples 20000 --refine 300 --save-results results/mc/mc_results.pkl
 
     # Quick sensitivity-focused Metropolis test
     python3 run_mc.py --method metropolis --n 5 --samples 3000 --weight 0.8
 
     # Reproduce a specific result exactly
-    python3 run_mc.py --n 5 --samples 5000 --seed 123 --save-results results-mc/seed123.pkl
+    python3 run_mc.py --n 5 --samples 5000 --seed 123 --save-results results/mc/seed123.pkl
 
 ================================================================================
 """
@@ -156,7 +156,7 @@ SEED            = 42
 # Output
 # Set SAVE_RESULTS to export numerical results for plotting on another machine.
 # Use plot_mc.py on your laptop to load the .pkl and produce LaTeX figures.
-SAVE_RESULTS    = 'results-mc/mc_results_latest.pkl'  # set None to skip saving
+SAVE_RESULTS    = 'results/mc/mc_results_latest.pkl'  # set None to skip saving
 NO_SHOW         = True     # do not pop up an interactive window (recommended on cluster)
 
 # ============================================================================ #

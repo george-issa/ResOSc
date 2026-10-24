@@ -6,8 +6,8 @@ Pipeline per floor K_MIN ∈ {0.01, 0.02, 0.05, 0.1, 0.2, 0.5}: constrained
 Metropolis search (all nine bonds ≥ K_MIN as hard sampling bounds, α = 1,
 min gap 3 lw, step 0.2) → floor-constrained polish (equalizer objective,
 29 params) → swept-metric evaluation. Script preserved via
-`results-mc/route3_sweep.log`; data `results-mc/route3_sweep.pkl` (incl.
-polished parameters per floor); figure `results-mc/route3_curve.pdf`.
+`results/route3/route3_sweep.log`; data `results/route3/route3_sweep.pkl` (incl.
+polished parameters per floor); figure `results/route3/route3_curve.pdf`.
 
 | floor | search | polished iso | swept | min gap |
 |---|---|---|---|---|
@@ -44,7 +44,7 @@ Default 3.0; CLI flag `--min-gap` (0 disables); CONFIG constant
 
 **Constrained one-bond polish** (equalizer objective + smooth feasibility
 ramp, 12 restarts; parameters in
-`results-mc/one_bond_champion_resolvable.npy`):
+`results/mc/one_bond_champion_resolvable.npy`):
 
 | Quantity | Value |
 |---|---|
@@ -177,8 +177,8 @@ yardstick, which is the point.
 | Pool median box-norm | 0.596 |
 | Own-ref ratio of the raw-best config | 0.936 (its couplings *hurt* it) |
 
-Results: `results-mc/mc_results_v5_boxnorm.pkl`, figure
-`results-mc/mc_results_v5.pdf`, log `run_v5.log`. A sensitivity-only run
+Results: `results/mc/mc_results_v5_boxnorm.pkl`, figure
+`results/mc/mc_results_v5.pdf`, log `run_v5.log`. A sensitivity-only run
 (α = 1.0, `run_v5b.log`, `mc_results_v5_sensonly.pkl`) gives coupling its
 best shot at the line — see below.
 
@@ -209,7 +209,7 @@ resolvability-aware figure of merit — e.g. requiring mode spacing above a
 linewidth, band-integrated response, or a Fisher-information formulation —
 is the right next step before drawing final conclusions.
 
-Files: `results-mc/mc_results_v5_sensonly.pkl`, `run_v5b.log`.
+Files: `results/mc/mc_results_v5_sensonly.pkl`, `run_v5b.log`.
 
 ### Interpretation (α = 0.5, balanced)
 
@@ -249,8 +249,8 @@ config as Run 3 otherwise.
 | Best raw coupled minimax | 32.68 |
 | Wall time | 3m 24s |
 
-Results: `results-mc/mc_results_v4_normobj.pkl`, figure
-`results-mc/mc_results_v4.pdf`, log `results-mc/run_v4.log`.
+Results: `results/mc/mc_results_v4_normobj.pkl`, figure
+`results/mc/mc_results_v4.pdf`, log `results/mc/run_v4.log`.
 
 ### The new exploit: reference sabotage
 
@@ -305,8 +305,8 @@ couplings [0.001, 1.0] (bounds are also CLI flags now). 20000 steps,
 | Nominal (isolated-peak) normalized > 1 | 9 / 100, max **1.0950** |
 | Wall time | 3m 38s |
 
-Results: `results-mc/mc_results_v3_extended.pkl`, figure
-`results-mc/mc_results_v3.pdf`, log `results-mc/run_v3.log`.
+Results: `results/mc/mc_results_v3_extended.pkl`, figure
+`results/mc/mc_results_v3.pdf`, log `results/mc/run_v3.log`.
 
 ### Findings
 
@@ -326,7 +326,7 @@ Results: `results-mc/mc_results_v3_extended.pkl`, figure
    with mean coupling strength across the refined pool (r ≈ -0.04).
 3. **Batch swept-metric validation of all 19 nominal winners (v2 + v3)**:
    **11 of 19 survive** (v2: 4/10, v3: 7/9); full table in
-   `results-mc/swept_validation.pkl`. The v3 *nominal* winner
+   `results/mc/swept_validation.pkl`. The v3 *nominal* winner
    (iso 1.0950) fails at swept 0.891 — an artifact of the isolated-peak
    approximation — but the v3 runner-up **validates at swept-normalized
    1.1226**, making it the overall validated champion (ahead of the v2
@@ -406,9 +406,9 @@ with several parameters pinned at their search bounds (masses at 1.5 and
 outside the current search box — widening `mass_bounds` / `wall_bounds`
 is a natural next experiment.
 
-Results: `results-mc/mc_results_v2.pkl`, figure `results-mc/mc_results_v2.pdf`,
-log `results-mc/run_v2.log`. The April baseline is preserved in
-`results-mc/mc_results.pkl`.
+Results: `results/mc/mc_results_v2.pkl`, figure `results/mc/mc_results_v2.pdf`,
+log `results/mc/run_v2.log`. The April baseline is preserved in
+`results/mc/mc_results.pkl`.
 
 ### Interference validation of the >1 result (2026-08-19)
 

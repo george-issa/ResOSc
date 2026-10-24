@@ -8,9 +8,9 @@ resolvability penalty (adjacent mode gaps >= --min-gap linewidths).
 
 Reproduces the session results of 2026-08-20:
 
-    python3 polish_one_bond.py --min-gap 0 --out results-mc/one_bond_champion.npy
+    python3 polish_one_bond.py --min-gap 0 --out results/mc/one_bond_champion.npy
         -> iso 1.1009 (UNRESOLVABLE doublet 0.05 lw — metric artifact, do not quote)
-    python3 polish_one_bond.py --min-gap 3 --out results-mc/one_bond_champion_resolvable.npy
+    python3 polish_one_bond.py --min-gap 3 --out results/mc/one_bond_champion_resolvable.npy
         -> iso 1.0951 / swept 1.0179, min gap 3.00 lw (the quotable design)
 """
 import os as _os, sys as _sys
@@ -26,9 +26,9 @@ from scipy.optimize import minimize
 from ResOSc.montecarlo import _build_and_solve, _box_optimal_uncoupled_scale
 
 p = argparse.ArgumentParser(description='Polish the one-bond design.')
-p.add_argument('--input', default='results-mc/mc_results_v5_sensonly.pkl',
+p.add_argument('--input', default='results/mc/mc_results_v5_sensonly.pkl',
                help='MC result pkl providing the starting configuration')
-p.add_argument('--out', default='results-mc/one_bond_champion_resolvable.npy',
+p.add_argument('--out', default='results/mc/one_bond_champion_resolvable.npy',
                help='Where to save the polished 21-parameter vector')
 p.add_argument('--min-gap', type=float, default=3.0,
                help='Resolvability: min adjacent mode gap in linewidths (0 disables)')

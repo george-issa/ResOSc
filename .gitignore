@@ -2,30 +2,31 @@
 __pycache__/
 *.pyc
 *.egg-info/
+build/
+dist/
+.ipynb_checkpoints/
 
 # macOS
 .DS_Store
 
-# Local figure output directories (pre-existing rule)
-figures
-figures-*
+# Local scratch figure directories (figures for the notes live in docs/figures)
+/figures*/
 
 # Rendered PNG previews (PDFs are tracked)
-results-mc/*.png
+results/**/*.png
+
+# Large regenerable MC run pickles (reproduce via scripts/run_mc.py with the
+# seeds recorded in docs/monte_carlo.md; small primary results stay tracked)
+results/mc/mc_results*.pkl
 
 # LaTeX build artifacts
 *.aux
 *.fdb_latexmk
 *.fls
+*.out
 *.synctex.gz
 *.toc
-ResOSc_notes_and_findings.log
-ResOSc_notes_and_findings.out
+docs/*.log
 
-# Large regenerable MC run pickles (reproduce via run_mc.py with the seeds
-# recorded in monte_carlo.md; small primary results stay tracked)
-results-mc/mc_results*.pkl
-
-# Third-party reference PDFs (not ours to redistribute)
-PhysRevLett.133.111401.pdf
-gravitational-waves-volume-1-theory-and-experiments-1-1nbsped-9780198570745-0198570740_compress.pdf
+# Third-party papers and books (not ours to redistribute; see docs/references.md)
+/references/

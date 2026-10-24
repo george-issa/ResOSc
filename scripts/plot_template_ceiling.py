@@ -12,7 +12,7 @@ as f^2, beating the f^(-7/3) source) and is cut off by the published
 100 kHz trap ceiling, not by any physical turnover — the corner is a
 constraint, not a peak.  Dashed: hypothetical traps beyond the range.
 
-Output: results-mc/template_ceiling.(pdf|png)
+Output: results/physical/template_ceiling.(pdf|png)
 """
 import os as _os, sys as _sys
 _ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
@@ -96,8 +96,8 @@ fig.suptitle('The falling template loses to the rising trap stiffness '
              r'($\beta = k_{\mathrm{trap}}L \propto f^2$)')
 fig.tight_layout()
 for ext in ('pdf', 'png'):
-    fig.savefig(f'results-mc/template_ceiling.{ext}', dpi=200)
-print('saved results-mc/template_ceiling.pdf/.png')
+    fig.savefig(f'results/physical/template_ceiling.{ext}', dpi=200)
+print('saved results/physical/template_ceiling.pdf/.png')
 for ro in ('A', 'B'):
     print(f'readout {ro}: d_max(10 kHz) = {curves[ro][0]:.2f} AU, '
           f'd_max(100 kHz) = {curves[ro][np.argmin(np.abs(f_traps-F_CEIL))]:.2f} AU, '

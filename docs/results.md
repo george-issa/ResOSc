@@ -192,7 +192,7 @@ Chain diagnostics confirm the fixes: the best energy (−1.792) was found at ste
 A Metropolis-only run with an extended search box (masses [0.1, 3.0], wall springs [0.2, 6.0], couplings [0.001, 1.0] — now the default in `run_mc.py`) found 9/100 nominal winners, max iso-normalized 1.095. Two lessons emerged:
 
 1. **The raw-sensitivity objective is scale-unbounded** — winners pin at any box edge (heavy masses + soft springs → low ω → peak response ∝ 1/ω²), so widening the box chases scale rather than structure. The next code improvement is to rank by *normalized* sensitivity, which is equally cheap (reference peaks are analytic).
-2. **The isolated-peak metric misranks candidates with overlapping modes.** A batch swept-metric validation of all 19 nominal winners (v2 + v3), with weights re-optimized under the full interference-aware response for each configuration and its reference, shows **11 of 19 survive** (v2: 4/10, v3: 7/9). The v3 *nominal* winner (iso 1.095) fails at swept 0.891, while the v3 runner-up **validates at swept-normalized 1.1226** — the overall champion. Its structure repeats the v2 motif, amplified: near-uncoupled staggered heavy/soft oscillators with a single strong bond (0.23) doing the hybridization. Data: `results-mc/swept_validation.pkl`, `results-mc/mc_results_v3_extended.pkl`, figures `mc_results_v3.pdf`, `mc_best_configs_v3.pdf`.
+2. **The isolated-peak metric misranks candidates with overlapping modes.** A batch swept-metric validation of all 19 nominal winners (v2 + v3), with weights re-optimized under the full interference-aware response for each configuration and its reference, shows **11 of 19 survive** (v2: 4/10, v3: 7/9). The v3 *nominal* winner (iso 1.095) fails at swept 0.891, while the v3 runner-up **validates at swept-normalized 1.1226** — the overall champion. Its structure repeats the v2 motif, amplified: near-uncoupled staggered heavy/soft oscillators with a single strong bond (0.23) doing the hybridization. Data: `results/mc/swept_validation.pkl`, `results/mc/mc_results_v3_extended.pkl`, figures `mc_results_v3.pdf`, `mc_best_configs_v3.pdf`.
 
 **Bottom line**: coupled configurations beating their uncoupled reference exist and survive honest interference-aware evaluation, with a validated margin of **+12.3%**; but the best absolute sensitivity in the explored pool still belongs to an uncoupled reference, and the swept check is mandatory before quoting any individual winner.
 
@@ -247,7 +247,7 @@ Open items: the corrected-physics search (Run 6) for the true optimum; the coupl
 
 ### 10. Route 3 Complete: The Coupling-Floor Curve (2026-08-20)
 
-With the resolvability constraint in place, the full route-3 sweep answers the lab's actual question — *given that every bond will have some parasitic coupling, what is the best achievable sensitivity?* All nine bonds were forced ≥ each floor (hard sampling bounds), each floor's winner polished under the same constraints, and every design validated on the conservative swept metric (figure: `results-mc/route3_curve.pdf`; data: `results-mc/route3_sweep.pkl`).
+With the resolvability constraint in place, the full route-3 sweep answers the lab's actual question — *given that every bond will have some parasitic coupling, what is the best achievable sensitivity?* All nine bonds were forced ≥ each floor (hard sampling bounds), each floor's winner polished under the same constraints, and every design validated on the conservative swept metric (figure: `results/route3/route3_curve.pdf`; data: `results/route3/route3_sweep.pkl`).
 
 **Headline results** (S/S_unc, swept metric, all modes ≥ 3 linewidths apart):
 
@@ -257,19 +257,19 @@ With the resolvability constraint in place, the full route-3 sweep answers the l
 
 **All three publishable routes are now resolved** (strain forcing, n = 10, constant-Q damping): (1) "uncoupled always wins" is false; (2) one bond suffices to beat the bound (+1.8% swept); (3) the full feasibility curve above, peaking at +21%. Remaining hardening steps: multi-seed sweep to smooth the curve, optimizing directly under the swept metric (the iso–swept gap is up to 23%), re-running the demo notebooks post-bug-fix, and committing the work.
 
-Artifacts: `results-mc/mc_results_v2.pkl`, `results-mc/mc_results_v2.pdf`, `results-mc/run_v2.log`.
+Artifacts: `results/mc/mc_results_v2.pkl`, `results/mc/mc_results_v2.pdf`, `results/mc/run_v2.log`.
 
 ---
 
 ## Visualizations
 
-**Baseline figures** (`figures-new/`):
+**Baseline figures** (`docs/figures/`):
 1. **force_model_comparison.pdf** — Generalized forces and peak sensitivities across all three force models.
 2. **frequency_spread.pdf** — Mode spacing comparison between coupled and non-interacting systems.
 3. **observable_comparison_gw.pdf** — Sensitivity profiles for GW strain forcing.
 4. **observable_comparison_dm.pdf** — Sensitivity profiles for DM uniform impulse forcing.
 
-**Monte Carlo figures** (`figures-mc/`):
+**Monte Carlo figures** (`docs/figures/`):
 5. **mc_gw_balanced.pdf** — Pareto scatter + best-config sensitivity profile (GW strain, α = 0.5).
 6. **mc_priority_comparison.pdf** — Side-by-side sensitivity profiles for α ∈ {0.9, 0.5, 0.1}.
 7. **mc_dm_balanced.pdf** — Pareto scatter + best-config sensitivity profile (DM uniform, α = 0.5).

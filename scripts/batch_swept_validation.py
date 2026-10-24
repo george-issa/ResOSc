@@ -2,7 +2,7 @@
 from the v2 and v3 Metropolis runs. For each config, re-optimize weights
 under the full swept response for both the coupled system and its uncoupled
 reference (identical 50-restart Nelder-Mead), and report the swept-normalized
-sensitivity. Results saved to results-mc/swept_validation.pkl.
+sensitivity. Results saved to results/mc/swept_validation.pkl.
 """
 import os as _os, sys as _sys
 _ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
@@ -45,8 +45,8 @@ def optimize_swept(system, seed=42, restarts=50):
 
 
 rows = []
-for run, path in [('v2', 'results-mc/mc_results_v2.pkl'),
-                  ('v3', 'results-mc/mc_results_v3_extended.pkl')]:
+for run, path in [('v2', 'results/mc/mc_results_v2.pkl'),
+                  ('v3', 'results/mc/mc_results_v3_extended.pkl')]:
     with open(path, 'rb') as f:
         d = pickle.load(f)
     for c in d['result_metro']['all_refined']:
@@ -69,7 +69,7 @@ for run, path in [('v2', 'results-mc/mc_results_v2.pkl'),
               f"({opt_c:.2f} / {opt_r:.2f})  spread={rows[-1]['spread']:.2f}",
               flush=True)
 
-with open('results-mc/swept_validation.pkl', 'wb') as f:
+with open('results/mc/swept_validation.pkl', 'wb') as f:
     pickle.dump(rows, f)
 
 survivors = [r for r in rows if r['swept_norm'] > 1.0]

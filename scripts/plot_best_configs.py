@@ -7,9 +7,9 @@ An externally polished champion (.npy: 10 masses, 10 walls, k_bond2) can
 be overlaid as the highlighted design via --champion.
 
     python3 plot_best_configs.py \
-        --input results-mc/mc_results_v7_resolvable.pkl \
-        --stem results-mc/mc_best_configs_v7 \
-        --champion results-mc/one_bond_champion_resolvable.npy
+        --input results/mc/mc_results_v7_resolvable.pkl \
+        --stem results/mc/mc_best_configs_v7 \
+        --champion results/mc/one_bond_champion_resolvable.npy
 """
 import os as _os, sys as _sys
 _ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
@@ -27,8 +27,8 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap, TwoSlopeNorm
 
 p = argparse.ArgumentParser(description='Plot bound-beating MC configurations.')
-p.add_argument('--input', default='results-mc/mc_results_v7_resolvable.pkl')
-p.add_argument('--stem',  default='results-mc/mc_best_configs_v7',
+p.add_argument('--input', default='results/mc/mc_results_v7_resolvable.pkl')
+p.add_argument('--stem',  default='results/mc/mc_best_configs_v7',
                help='Output path stem (.pdf and .png are appended)')
 p.add_argument('--label', default='v7 constrained run (20000 steps, min gap 3 linewidths)')
 p.add_argument('--note',  default='', help='Extra caution/annotation line')
