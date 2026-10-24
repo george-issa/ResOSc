@@ -175,3 +175,7 @@ as project history; see the note at the top of `docs/results.md`.
 | `notebooks/01_basics.ipynb` | Normal modes, forced response, mode shapes, observables |
 | `notebooks/02_forces_and_observables.ipynb` | Force models (GW strain vs DM), generalized forces, frequency spread |
 | `notebooks/03_monte_carlo.ipynb` | Monte Carlo optimization of masses and springs |
+
+## License
+
+Released under the [MIT License](LICENSE).
