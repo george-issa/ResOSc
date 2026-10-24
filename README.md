@@ -135,17 +135,18 @@ The full derivation is in `docs/anchored_model_notes.tex` and
 
 ## Scripts
 
-Scripts resolve paths from the repository root, so they can be run from any
-directory, e.g. `python scripts/run_mc.py --help`.
+Scripts are grouped like `results/` and write their outputs there. They
+resolve paths from the repository root, so they can be run from any
+directory, e.g. `python scripts/mc/run_mc.py --help`.
 
-| Script | Purpose | Output |
-|---|---|---|
-| `run_mc.py`, `plot_mc.py` | Monte Carlo / Metropolis search and its figures | `results/mc/` |
-| `validate_swept.py`, `batch_swept_validation.py` | Swept-metric validation of MC winners | `results/mc/` |
-| `polish_one_bond.py`, `plot_best_configs.py` | One-bond topology polish (route 2) and best-config figures | `results/mc/` |
-| `route3_sweep.py`, `plot_route3.py`, `plot_route3_champion.py` | Sensitivity vs parasitic coupling floor (route 3) | `results/route3/` |
-| `run_physopt.py` | Three-way comparison on the physical figure of merit | `results/physical/` |
-| `plot_physical_validation.py`, `plot_template_ceiling.py` | Physical-model validation and trap-ceiling figures | `results/physical/` |
+| Script | Purpose |
+|---|---|
+| `mc/run_mc.py`, `mc/plot_mc.py` | Monte Carlo / Metropolis search and its figures |
+| `mc/validate_swept.py`, `mc/batch_swept_validation.py` | Swept-metric validation of MC winners |
+| `mc/polish_one_bond.py`, `mc/plot_best_configs.py` | One-bond topology polish (route 2) and best-config figures |
+| `route3/route3_sweep.py`, `route3/plot_route3.py`, `route3/plot_route3_champion.py` | Sensitivity vs parasitic coupling floor (route 3) |
+| `physical/run_physopt.py` | Three-way comparison on the physical figure of merit |
+| `physical/plot_physical_validation.py`, `physical/plot_template_ceiling.py` | Physical-model validation and trap-ceiling figures |
 
 ## Documentation
 

@@ -16,7 +16,7 @@ docs/figures/
 results/**/*.pdf
 results/**/*.png
 
-# Large regenerable MC run pickles (reproduce via scripts/run_mc.py with the
+# Large regenerable MC run pickles (reproduce via scripts/mc/run_mc.py with the
 # seeds recorded in docs/monte_carlo.md; small primary results stay tracked)
 results/mc/mc_results*.pkl
 

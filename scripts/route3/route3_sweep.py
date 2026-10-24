@@ -8,7 +8,7 @@ lab cannot switch parasitic couplings off).  Pipeline per floor:
 Results -> results/route3/route3_sweep.pkl
 """
 import os as _os, sys as _sys
-_ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
+_ROOT = _os.path.dirname(_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
 _sys.path.insert(0, _ROOT)
 _os.chdir(_ROOT)
 import os, pickle

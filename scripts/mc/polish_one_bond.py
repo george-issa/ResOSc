@@ -14,7 +14,7 @@ Reproduces the session results of 2026-08-20:
         -> iso 1.0951 / swept 1.0179, min gap 3.00 lw (the quotable design)
 """
 import os as _os, sys as _sys
-_ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
+_ROOT = _os.path.dirname(_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
 _sys.path.insert(0, _ROOT)
 _os.chdir(_ROOT)
 import sys, os

@@ -17,7 +17,7 @@ Outputs: results/physical/physopt_v1.pkl, physopt_v1_traces.(pdf|png),
 physopt_v1_curves.(pdf|png), physopt_v1.log (stdout tee'd by hand).
 """
 import os as _os, sys as _sys
-_ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
+_ROOT = _os.path.dirname(_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
 _sys.path.insert(0, _ROOT)
 _os.chdir(_ROOT)
 

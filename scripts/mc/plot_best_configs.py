@@ -12,7 +12,7 @@ be overlaid as the highlighted design via --champion.
         --champion results/mc/one_bond_champion_resolvable.npy
 """
 import os as _os, sys as _sys
-_ROOT = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
+_ROOT = _os.path.dirname(_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
 _sys.path.insert(0, _ROOT)
 _os.chdir(_ROOT)
 import argparse
