@@ -9,10 +9,9 @@ dist/
 # macOS
 .DS_Store
 
-# Local scratch figure directories (figures for the notes live in docs/figures)
-/figures*/
-
-# Rendered PNG previews (PDFs are tracked)
+# Figures (regenerate with the notebooks and scripts)
+docs/figures/
+results/**/*.pdf
 results/**/*.png
 
 # Large regenerable MC run pickles (reproduce via scripts/run_mc.py with the
@@ -27,6 +26,3 @@ results/mc/mc_results*.pkl
 *.synctex.gz
 *.toc
 docs/*.log
-
-# Third-party papers and books (not ours to redistribute; see docs/references.md)
-/references/

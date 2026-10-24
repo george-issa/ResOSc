@@ -18,12 +18,15 @@ Sensor Detector (LSD) parameters.
 ResOSc/          Python package
 scripts/         Optimization runs and figure scripts (outputs go to results/)
 notebooks/       Worked examples
-docs/            Notes (LaTeX + PDF), research logs, figures, references
+docs/            Notes (LaTeX + PDF), research logs, references
 results/
   mc/            Dimensionless-model Monte Carlo and Metropolis runs
   route3/        Parasitic-coupling-floor sweep
   physical/      Physical (SI) model optimization and validation
 ```
+
+Figures are not tracked: the notebooks write them to `docs/figures/` and the
+scripts to `results/`.
 
 ## Installation
 
@@ -158,9 +161,9 @@ directory, e.g. `python scripts/run_mc.py --help`.
 | `docs/monte_carlo.md` | Monte Carlo run log: settings, seeds, artifacts |
 | `docs/references.md` | Papers the physical model is anchored to |
 
-LaTeX sources sit next to their PDFs; build with
-`cd docs && latexmk -pdf anchored_model_notes.tex`. Figures produced by the
-notebooks are saved to `docs/figures/`.
+LaTeX sources sit next to their PDFs. To rebuild them, first regenerate the
+figures (run the notebooks and the `plot_*` scripts), then
+`cd docs && latexmk -pdf anchored_model_notes.tex`.
 
 Results computed before the 2026-08-20 eigenvector fix are superseded and kept
 as project history; see the note at the top of `docs/results.md`.
